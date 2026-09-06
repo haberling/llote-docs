@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Commands — llote docs</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&display=swap">
   <link rel="stylesheet" href="/css/framework.css">
   <link rel="stylesheet" href="/css/theme.css">
   <link rel="stylesheet" href="/css/widgets/code.css">
@@ -20,13 +23,13 @@
       <main id="app"><h1>Commands</h1>
 <ul><li><code>llote "text"</code> — add a note to the default file</li><li><code>llote</code> — list notes from the default file</li><li><code>llote &lt;file.llote&gt;</code> — list notes from that file</li><li><code>llote &lt;file.llote&gt; "text"</code> — add a note to that file</li><li><code>llote new</code> — create <code>./log.llote</code></li><li><code>llote setup</code> — download the embedding model ahead of time</li><li><code>llote pop [file]</code> — remove the last note</li><li><code>llote ask "question"</code> — semantic search over your notes</li><li><code>llote browse [file]</code> — a pageable TUI note browser</li></ul>
 <p>A bare argument is a file path if it ends in <code>.llote</code>, otherwise it's note text or a question — <code>new</code> and <code>ask</code> are the only reserved leading words.</p></main>
-    </div>
 
-    <nav class="notebook-controls" aria-label="Notebook pages">
-      <a id="nb-prev" class="notebook-nav-btn" href="/" aria-label="Previous page">&#8592;</a>
-      <div id="nb-indicator" class="notebook-indicator" aria-live="polite"></div>
-      <a id="nb-next" class="notebook-nav-btn" href="/" aria-label="Next page">&#8594;</a>
-    </nav>
+      <nav class="notebook-controls" aria-label="Notebook pages">
+        <a id="nb-prev" class="notebook-nav-btn" href="/" aria-label="Previous page">&#8592;</a>
+        <div id="nb-indicator" class="notebook-indicator" aria-live="polite"></div>
+        <a id="nb-next" class="notebook-nav-btn" href="/" aria-label="Next page">&#8594;</a>
+      </nav>
+    </div>
   </div>
 
   <footer class="site-footer">

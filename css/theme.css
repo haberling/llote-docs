@@ -39,13 +39,13 @@ body {
 body {
   background: radial-gradient(ellipse at 50% 0%, var(--desk) 0%, var(--desk-edge) 100%);
   color: var(--ink);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: "Arvo", Georgia, "Times New Roman", serif;
   line-height: 1.6;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  padding: 3vh 1rem 2rem;
+  padding: 1.5vh 1rem 1rem;
   box-sizing: border-box;
 }
 
@@ -61,7 +61,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.25rem;
   width: 100%;
   flex: 1;
   justify-content: center;
@@ -69,7 +68,7 @@ body {
 
 .notebook {
   position: relative;
-  width: min(94vw, 620px, calc(76vh * 0.75));
+  width: min(97vw, 720px, calc(90vh * 0.75));
   aspect-ratio: 3 / 4;
   perspective: 2200px;
   background: var(--accent);
@@ -86,8 +85,11 @@ body {
 .spiral {
   position: absolute;
   left: -14px;
-  top: 4%;
-  bottom: 4%;
+  top: 1%;
+  /* Matches .page's own `bottom: 2.25rem` (the reserved control-dock strip)
+     so the rings stop flush at the page stack's real bottom edge instead
+     of running past it, over the dock, at the old 4%-of-notebook offset. */
+  bottom: 2.25rem;
   width: 28px;
   z-index: 900;
   background-image: radial-gradient(
@@ -108,7 +110,10 @@ body {
 
 .page {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 2.25rem;
   transform-style: preserve-3d;
   transform-origin: left center;
   transform: rotateY(0deg);
@@ -176,6 +181,37 @@ body {
   margin: 0 auto 1rem;
 }
 
+/* Cover page (always PAGES[0], see root-copy/js/notebook.js) gets its own
+   treatment -- just the mark and a big friendly wordmark underneath it,
+   nothing else. content/index.md puts the image before the "# llote"
+   heading, so plain block flow already stacks them mark-then-wordmark. */
+.notebook > .page:first-of-type .page-content {
+  text-align: center;
+  padding-top: 10%;
+}
+
+.notebook > .page:first-of-type .page-content img {
+  max-width: 70%;
+  margin-bottom: 1.5rem;
+}
+
+/* Cover is a solid-color board, front and back -- like a real notebook's
+   cover vs. its plain-paper interior pages. No ruled-line/margin texture
+   here, just the brand color the owl mark's own background already
+   matches, so the mark reads as debossed straight into the cover. */
+.notebook > .page:first-of-type .face-front,
+.notebook > .page:first-of-type .face-back {
+  background-color: var(--accent);
+  background-image: none;
+}
+
+.notebook > .page:first-of-type .page-content h1 {
+  font-size: 3.75rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
 .page-content code {
   background: rgba(46, 15, 5, 0.08);
   padding: 0.1rem 0.35rem;
@@ -231,41 +267,52 @@ body {
    Controls
    --------------------------------------------------------------------- */
 
+/* Docked to the notebook's own bottom edge (see .page's `bottom: 2.25rem`
+   above, which reserves this strip) instead of a separate row below the
+   notebook -- takes less total vertical space and lets the notebook itself
+   grow into what that used to cost. */
 .notebook-controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2.25rem;
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  justify-content: center;
+  gap: 0.75rem;
+  background: var(--ink);
+  border-radius: 0 0 6px 6px;
+  z-index: 950;
 }
 
 .notebook-nav-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
   border-radius: 50%;
-  background: var(--ink);
+  background: color-mix(in srgb, var(--paper) 14%, transparent);
   color: var(--paper);
-  font-size: 1.1rem;
+  font-size: 0.8rem;
   text-decoration: none;
-  box-shadow: 0 2px 6px var(--shadow-soft);
-  transition: transform 0.15s ease, opacity 0.15s ease;
+  transition: transform 0.15s ease, opacity 0.15s ease, background 0.15s ease;
 }
 
 .notebook-nav-btn:hover {
-  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--paper) 24%, transparent);
   text-decoration: none;
 }
 
 .notebook-nav-btn[aria-disabled="true"] {
-  opacity: 0.3;
+  opacity: 0.35;
   pointer-events: none;
 }
 
 .notebook-indicator {
-  font-size: 0.85rem;
-  color: var(--ink);
-  min-width: 12rem;
+  font-size: 0.68rem;
+  color: var(--paper);
   text-align: center;
 }
 
