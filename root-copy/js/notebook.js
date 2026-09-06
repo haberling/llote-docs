@@ -218,25 +218,33 @@ function updateSpiralArt(animate, prevIndex) {
 }
 
 function applyState(animate, prevIndex) {
-  // The one page whose `flipped` boolean is actually changing this call --
-  // see applyStacking()'s comment for why it needs a temporary z-index
-  // boost while animate is true.
+  // The page that actually plays the flip transition -- see applyStacking()'s
+  // comment for why it needs a temporary z-index boost while it's turning.
+  // A jump of more than one page (the hamburger menu, straight to Contents)
+  // still only animates this single boundary page: every OTHER page whose
+  // `flipped` boolean also changes this call snaps instantly (no-anim) to
+  // its new resting spot instead of animating alongside it. The resting
+  // z-index formula below is only ever correct for one moving page at a
+  // time, so letting several pages animate together would z-fight; snapping
+  // the rest keeps the illusion of a single turn landing on the target page
+  // while every page's actual state still ends up correct.
   const turningIndex = animate ? Math.min(prevIndex, current) : null;
   pageEls.forEach((el, i) => {
     const flipped = i < current;
-    if (!animate) {
+    const isTurning = i === turningIndex;
+    if (!isTurning) {
       el.classList.add("no-anim");
     }
     el.classList.add("turning");
     el.classList.toggle("flipped", flipped);
-    if (!animate) {
+    if (!isTurning) {
       void el.offsetWidth; // force reflow so the no-anim transition-less state actually applies
       el.classList.remove("no-anim");
       el.classList.remove("turning");
     } else {
       el.addEventListener("transitionend", () => {
         el.classList.remove("turning");
-        if (i === turningIndex) applyStacking();
+        applyStacking();
       }, { once: true });
     }
   });
@@ -265,7 +273,10 @@ registerRouteHandler((route) => {
   }
   const idx = indexForPath(route.path);
   const prevIndex = current;
-  const animate = Math.abs(idx - current) === 1;
+  // Any real page change animates now, not just an adjacent +/-1 move -- see
+  // applyState()'s comment for how a longer jump (the hamburger menu) still
+  // animates as a single turn even though it crosses several pages at once.
+  const animate = idx !== current;
   current = idx;
   applyState(animate, prevIndex);
 });

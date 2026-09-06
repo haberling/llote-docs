@@ -258,6 +258,36 @@ body {
   color: var(--paper);
 }
 
+/* The built-in "downloads" widget (widgets/downloads.css) has the same
+   dark-theme-token problem as the code widget above -- fixed the same way,
+   scoped here instead of touching the shared widget file. */
+.page-content .downloads-widget {
+  background: none;
+  border-color: color-mix(in srgb, var(--ink) 25%, transparent);
+}
+
+.page-content .downloads-widget h3 {
+  color: var(--ink);
+}
+
+.page-content .downloads-widget a.download-button {
+  background: color-mix(in srgb, var(--ink) 5%, var(--paper));
+}
+
+.page-content .copy-command-label {
+  color: color-mix(in srgb, var(--ink) 55%, transparent);
+}
+
+.page-content .copy-command-text {
+  background: var(--paper);
+  border-color: color-mix(in srgb, var(--ink) 25%, transparent);
+  color: var(--ink);
+}
+
+.page-content .copy-command-button:hover {
+  color: var(--paper);
+}
+
 /* Depth cue: a shadow that rises and falls once per flip, synced via the
    .turning class added right when a flip starts and removed on
    transitionend (see root-copy/js/notebook.js). */

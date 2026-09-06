@@ -1,10 +1,16 @@
 # Install
 
-llote is a Windows command-line tool.
+llote is a Windows command-line tool and tui, available from two places:
 
-1. Download `llote-setup.exe` from the releases page.
-2. Run it — no admin rights needed, it installs just for your user account.
-3. Open a new terminal and run `llote`.
+```downloads
+title: Get llote
+items:
+  - label: "Microsoft Store"
+    url: "https://apps.microsoft.com/detail/9N8BHTQZR4L4"
+  - label: "consoland.net"
+    url: "https://consoland.net/utilities/llote"
+```
 
-Prefer building from source? `cargo build --release` works too, as long as
-you have the MSVC linker on `PATH` (a Visual Studio Developer environment).
+* The store download allows less fine grained control of the uninstall process. *
+
+Once installed, you can run llote from the command line `llote`. Or from the start menu's program registration.
