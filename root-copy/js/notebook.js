@@ -13,14 +13,38 @@
 // the RENDERING of a route change is different here.
 import { registerRouteHandler, start } from "/js/router.js";
 
-const PAGES = [
-  { path: "", title: "Cover" },
-  { path: "install", title: "Install" },
-  { path: "quickstart", title: "Quick Start" },
-  { path: "commands", title: "Commands" },
-  { path: "file-format", title: "File Format" },
-  { path: "philosophy", title: "Philosophy & FAQ" },
-];
+// PAGES used to be a hand-maintained list here, a second source of truth
+// alongside content/manifest.json (Canary's own generated nav). Adding or
+// reordering a page meant editing both, and they could silently drift.
+// Now PAGES is just manifest.json's nav tree, flattened depth-first: a
+// section's own page, then all of its children recursively, before the
+// next top-level sibling -- so once nav.depth > 1 ever puts subpages under
+// a section, arrow-next reads that whole section before advancing, same as
+// this docs site's own "the page-flip IS the nav" model expects. At the
+// current nav.depth (1) there are no children, so this is just the flat
+// top-level list, same shape as before -- but reordering a section, or
+// adding a new one, is now purely a content/<slug>/.nav.json edit, no JS
+// change required.
+function flattenNav(items) {
+  const out = [];
+  for (const item of items) {
+    out.push({ path: item.path ?? "", title: item.title });
+    if (item.children && item.children.length) {
+      out.push(...flattenNav(item.children));
+    }
+  }
+  return out;
+}
+
+async function loadPages() {
+  const res = await fetch("/content/manifest.json");
+  const manifest = await res.json();
+  const pages = flattenNav(manifest.nav);
+  // Canary always titles the home entry "Home"; this theme calls that page
+  // the Cover instead -- cosmetic to the notebook, not to the real site nav.
+  if (pages[0]) pages[0].title = "Cover";
+  return pages;
+}
 
 function normalize(path) {
   return path.replace(/^\/+|\/+$/g, "");
@@ -42,7 +66,12 @@ const prevLink = document.getElementById("nb-prev");
 const nextLink = document.getElementById("nb-next");
 const indicator = document.getElementById("nb-indicator");
 
-let current = indexForPath(window.location.pathname);
+let PAGES = [];
+let current = 0;
+// Route changes can fire (router.js dispatches on load) before loadPages()'s
+// fetch resolves; stash the requested path and resolve it once PAGES exists
+// instead of resolving against an empty array.
+let pendingPath = window.location.pathname;
 let pageEls = [];
 let ready = false;
 
@@ -77,9 +106,24 @@ async function fetchContent(path) {
   }
 }
 
-function applyStacking() {
+function applyStacking(turningIndex) {
   const total = PAGES.length;
   pageEls.forEach((el, i) => {
+    if (i === turningIndex) {
+      // The page actively mid-flip always renders above every resting page
+      // (but below .spiral's z-index: 900 in theme.css -- the rings stay on
+      // top of every page, animating or not). Without this override, a
+      // BACKWARD flip's z-index recalculates instantly at the start of the
+      // transition (only `transform` is CSS-transitioned, not z-index),
+      // while the turning page's rotation is still right where it rested
+      // when flipped -- so for a moment the page underneath (now ranked
+      // higher by the resting formula below) paints over it, showing that
+      // page's back face before the turning page has actually swung out of
+      // the way. Reset back to the resting formula in applyState()'s own
+      // transitionend handler once this page's flip actually finishes.
+      el.style.zIndex = 500;
+      return;
+    }
     el.style.zIndex = i < current ? total + i : total - i;
   });
 }
@@ -174,6 +218,10 @@ function updateSpiralArt(animate, prevIndex) {
 }
 
 function applyState(animate, prevIndex) {
+  // The one page whose `flipped` boolean is actually changing this call --
+  // see applyStacking()'s comment for why it needs a temporary z-index
+  // boost while animate is true.
+  const turningIndex = animate ? Math.min(prevIndex, current) : null;
   pageEls.forEach((el, i) => {
     const flipped = i < current;
     if (!animate) {
@@ -186,15 +234,20 @@ function applyState(animate, prevIndex) {
       el.classList.remove("no-anim");
       el.classList.remove("turning");
     } else {
-      el.addEventListener("transitionend", () => el.classList.remove("turning"), { once: true });
+      el.addEventListener("transitionend", () => {
+        el.classList.remove("turning");
+        if (i === turningIndex) applyStacking();
+      }, { once: true });
     }
   });
-  applyStacking();
+  applyStacking(turningIndex);
   updateControls();
   updateSpiralArt(animate, prevIndex);
 }
 
 async function init() {
+  PAGES = await loadPages();
+  current = indexForPath(pendingPath);
   pageEls = PAGES.map(() => buildPageEl());
   const contents = await Promise.all(PAGES.map((p) => fetchContent(p.path)));
   contents.forEach((html, i) => {
@@ -206,11 +259,11 @@ async function init() {
 }
 
 registerRouteHandler((route) => {
-  const idx = indexForPath(route.path);
   if (!ready) {
-    current = idx;
+    pendingPath = route.path;
     return;
   }
+  const idx = indexForPath(route.path);
   const prevIndex = current;
   const animate = Math.abs(idx - current) === 1;
   current = idx;

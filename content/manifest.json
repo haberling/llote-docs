@@ -6,6 +6,21 @@
       "children": null
     },
     {
+      "title": "Contents",
+      "path": "contents",
+      "children": null
+    },
+    {
+      "title": "Install",
+      "path": "install",
+      "children": null
+    },
+    {
+      "title": "Quick Start",
+      "path": "quickstart",
+      "children": null
+    },
+    {
       "title": "Commands",
       "path": "commands",
       "children": null
@@ -16,18 +31,8 @@
       "children": null
     },
     {
-      "title": "Install",
-      "path": "install",
-      "children": null
-    },
-    {
       "title": "Philosophy \u0026 FAQ",
       "path": "philosophy",
-      "children": null
-    },
-    {
-      "title": "Quick Start",
-      "path": "quickstart",
       "children": null
     }
   ]

@@ -11,7 +11,7 @@
   },
   "renderMode": "hybrid",
   "nav": {
-    "depth": 0
+    "depth": 2
   },
   "serve": {
     "port": 6866
@@ -28,6 +28,7 @@
   },
   "tools": {
     "reading-time": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/reading-time.ps1",
+    "toc": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/toc.ps1",
     // Precompile this to a native binary once (needs a .NET 10+ SDK and a
     // working Native AOT toolchain) via `canary tools build curtain`, then
     // swap the active line below for the commented one to skip re-JITing

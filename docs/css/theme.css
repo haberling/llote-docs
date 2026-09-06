@@ -292,7 +292,11 @@ body {
 /* Docked to the notebook's own bottom edge (see .page's `bottom: 2.25rem`
    above, which reserves this strip) instead of a separate row below the
    notebook -- takes less total vertical space and lets the notebook itself
-   grow into what that used to cost. */
+   grow into what that used to cost. z-index below every .page (see
+   applyStacking() in root-copy/js/notebook.js: its total-i/total+i values
+   are always >= 1) so a turning page's corner swings up and over this dock
+   -- like it would over a real notebook's binding -- instead of the dock
+   cutting across the animation. */
 .notebook-controls {
   position: absolute;
   left: 0;
@@ -305,7 +309,7 @@ body {
   gap: 0.75rem;
   background: var(--ink);
   border-radius: 0 0 6px 6px;
-  z-index: 950;
+  z-index: 0;
 }
 
 .notebook-nav-btn {
