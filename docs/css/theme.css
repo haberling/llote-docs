@@ -112,6 +112,20 @@ body {
   background-image: url("/img/ring-half.svg");
 }
 
+/* Shown briefly at the start of a turn between two interior pages (never
+   the cover) -- toggled from root-copy/js/notebook.js's updateSpiralArt(),
+   which also reverts it back to ring-full after the same delay used for
+   the cover-opening swap. .on-turn is a forward ("right") turn;
+   .on-turn-back is backward ("left") and reuses the cover's half-ring art,
+   which reads correctly for that direction too. */
+#notebook.on-turn .spiral {
+  background-image: url("/img/ring-turn.svg");
+}
+
+#notebook.on-turn-back .spiral {
+  background-image: url("/img/ring-half.svg");
+}
+
 /* ---------------------------------------------------------------------
    Pages
    --------------------------------------------------------------------- */

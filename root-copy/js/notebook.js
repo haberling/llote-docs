@@ -116,25 +116,64 @@ let spiralArtTimer = null;
 // art the instant the click happens, still mid-animation. Closing the
 // book (arriving back at the cover) is the opposite: the cover starts
 // occluding again immediately, so that swap is never delayed.
-function updateSpiralArt(animate) {
+//
+// A turn between two INTERIOR pages (neither end the cover) gets its own
+// transient artwork for the same reason, but mirrored: the turning page
+// itself starts occluding the ring immediately (no delay going in), then
+// settles back to the resting ring-full artwork after the same delay used
+// for the cover-opening swap. Which artwork depends on direction -- a
+// forward turn ("turning right") uses ring-turn.svg, a backward turn
+// ("turning left") uses ring-half.svg (the same art the cover uses) --
+// each only reads correctly for its own direction.
+function updateSpiralArt(animate, prevIndex) {
   if (spiralArtTimer !== null) {
     clearTimeout(spiralArtTimer);
     spiralArtTimer = null;
   }
   const onCover = current === 0;
+  const wasOnCover = prevIndex === 0;
+
+  function clearTransients() {
+    notebook.classList.remove("on-turn", "on-turn-back");
+  }
+
   if (onCover) {
+    clearTransients();
     notebook.classList.add("on-cover");
-  } else if (animate) {
+    return;
+  }
+
+  if (wasOnCover && animate) {
+    clearTransients();
     spiralArtTimer = setTimeout(() => {
       spiralArtTimer = null;
       notebook.classList.remove("on-cover");
     }, flipDurationMs() * 0.5);
+    return;
+  }
+
+  notebook.classList.remove("on-cover");
+
+  if (animate && current > prevIndex) {
+    notebook.classList.remove("on-turn-back");
+    notebook.classList.add("on-turn");
+    spiralArtTimer = setTimeout(() => {
+      spiralArtTimer = null;
+      notebook.classList.remove("on-turn");
+    }, flipDurationMs() * 0.5);
+  } else if (animate && current < prevIndex) {
+    notebook.classList.remove("on-turn");
+    notebook.classList.add("on-turn-back");
+    spiralArtTimer = setTimeout(() => {
+      spiralArtTimer = null;
+      notebook.classList.remove("on-turn-back");
+    }, flipDurationMs() * 0.5);
   } else {
-    notebook.classList.remove("on-cover");
+    clearTransients();
   }
 }
 
-function applyState(animate) {
+function applyState(animate, prevIndex) {
   pageEls.forEach((el, i) => {
     const flipped = i < current;
     if (!animate) {
@@ -152,7 +191,7 @@ function applyState(animate) {
   });
   applyStacking();
   updateControls();
-  updateSpiralArt(animate);
+  updateSpiralArt(animate, prevIndex);
 }
 
 async function init() {
@@ -163,7 +202,7 @@ async function init() {
   });
   appEl.style.display = "none";
   ready = true;
-  applyState(false);
+  applyState(false, current);
 }
 
 registerRouteHandler((route) => {
@@ -172,9 +211,10 @@ registerRouteHandler((route) => {
     current = idx;
     return;
   }
+  const prevIndex = current;
   const animate = Math.abs(idx - current) === 1;
   current = idx;
-  applyState(animate);
+  applyState(animate, prevIndex);
 });
 
 // prefers-reduced-motion is handled purely in CSS (see theme.css) --
