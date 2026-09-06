@@ -1,0 +1,296 @@
+/*
+ * llote docs theme -- a bespoke spiral-bound notebook, not a standard
+ * Canary header/nav/#app layout. framework.css's #app/.site-header/.site-nav
+ * rules are effectively unused here (see shell.html: no header, no nav) --
+ * everything below is genuinely new, not an override of framework defaults.
+ *
+ * Brand colors come straight from llote's own mark (graphics-bin/logo-source.svg
+ * in the llote repo, copied here as img/owl-mark.svg): #FF6600 orange,
+ * #2E0F05 near-black brown ink.
+ */
+
+:root {
+  color-scheme: light;
+  --ink: #2e0f05;
+  --accent: #ff6600;
+  --paper: #fffdf6;
+  --paper-line: rgba(70, 110, 190, 0.22);
+  --paper-margin: rgba(196, 62, 48, 0.35);
+  --wire: #9a9186;
+  --desk: #e7e1d4;
+  --desk-edge: #d8d0bd;
+  --shadow-soft: rgba(46, 15, 5, 0.18);
+  --flip-duration: 0.7s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --flip-duration: 0.001s;
+  }
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  background: radial-gradient(ellipse at 50% 0%, var(--desk) 0%, var(--desk-edge) 100%);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 3vh 1rem 2rem;
+  box-sizing: border-box;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------------------
+   The desk + notebook stage
+   --------------------------------------------------------------------- */
+
+.desk {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+  flex: 1;
+  justify-content: center;
+}
+
+.notebook {
+  position: relative;
+  width: min(94vw, 620px, calc(76vh * 0.75));
+  aspect-ratio: 3 / 4;
+  perspective: 2200px;
+  background: var(--accent);
+  border-radius: 6px;
+  box-shadow:
+    0 2px 4px var(--shadow-soft),
+    0 30px 60px -20px rgba(46, 15, 5, 0.45);
+}
+
+/* Ring-punched spiral binding along the left edge, always on top of every
+   page. A single tileable radial-gradient "ring" repeated down the strip --
+   see root/CLAUDE-facing plan notes: no page-flip library does spiral
+   binding specifically, this is hand-built. */
+.spiral {
+  position: absolute;
+  left: -14px;
+  top: 4%;
+  bottom: 4%;
+  width: 28px;
+  z-index: 900;
+  background-image: radial-gradient(
+    circle at 14px 14px,
+    transparent 0 5px,
+    var(--wire) 5px 7px,
+    transparent 7px 100%
+  );
+  background-size: 100% 28px;
+  background-repeat: repeat-y;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------------
+   Pages
+   --------------------------------------------------------------------- */
+
+.page {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  transform: rotateY(0deg);
+  transition: transform var(--flip-duration) cubic-bezier(0.45, 0.05, 0.55, 0.95);
+  border-radius: 6px;
+}
+
+.page.no-anim {
+  transition: none !important;
+}
+
+.page.flipped {
+  transform: rotateY(-180deg);
+}
+
+.face {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+  backface-visibility: hidden;
+  border-radius: 6px;
+  background-color: var(--paper);
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 27px,
+      var(--paper-line) 28px
+    ),
+    linear-gradient(to right, transparent 0 42px, var(--paper-margin) 42px 43px, transparent 43px);
+}
+
+.face-front {
+  padding: 3.25rem 1.75rem 2rem 3rem;
+}
+
+.face-back {
+  transform: rotateY(180deg);
+}
+
+.page-content {
+  max-width: 46ch;
+  margin: 0 auto;
+}
+
+.page-content h1 {
+  font-size: 1.9rem;
+  margin: 0 0 1rem;
+  color: var(--ink);
+}
+
+.page-content p,
+.page-content ul,
+.page-content ol {
+  margin: 0 0 1rem;
+}
+
+.page-content strong {
+  color: var(--accent);
+}
+
+.page-content img {
+  display: block;
+  max-width: 55%;
+  margin: 0 auto 1rem;
+}
+
+.page-content code {
+  background: rgba(46, 15, 5, 0.08);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+/* The built-in "code" widget (widgets/code.css) reads framework.css's dark-
+   theme tokens (--bg-elevated/--text-dim/--border), which this paper theme
+   never redefines site-wide -- overridden here instead, scoped to the
+   widget, so the rest of the light paper palette stays untouched. */
+.page-content .code-widget-lang {
+  color: color-mix(in srgb, var(--ink) 55%, transparent);
+}
+
+.page-content .code-widget pre {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.page-content .code-widget code {
+  color: var(--paper);
+}
+
+/* Depth cue: a shadow that rises and falls once per flip, synced via the
+   .turning class added right when a flip starts and removed on
+   transitionend (see root-copy/js/notebook.js). */
+.shadow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.45), transparent 55%);
+}
+
+.page.turning .shadow {
+  animation: pageCurl var(--flip-duration) ease;
+}
+
+@keyframes pageCurl {
+  0% {
+    opacity: 0;
+  }
+  48% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Controls
+   --------------------------------------------------------------------- */
+
+.notebook-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.notebook-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 1.1rem;
+  text-decoration: none;
+  box-shadow: 0 2px 6px var(--shadow-soft);
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.notebook-nav-btn:hover {
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+.notebook-nav-btn[aria-disabled="true"] {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.notebook-indicator {
+  font-size: 0.85rem;
+  color: var(--ink);
+  min-width: 12rem;
+  text-align: center;
+}
+
+.site-footer {
+  padding: 1rem 0 0;
+  color: var(--ink);
+  opacity: 0.55;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------------
+   Responsive
+   --------------------------------------------------------------------- */
+
+@media (max-width: 480px) {
+  .notebook {
+    width: 96vw;
+  }
+
+  .face-front {
+    padding: 2.75rem 1.25rem 1.5rem 2.25rem;
+  }
+
+  .page-content h1 {
+    font-size: 1.5rem;
+  }
+}

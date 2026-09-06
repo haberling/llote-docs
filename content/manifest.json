@@ -1,0 +1,34 @@
+{
+  "nav": [
+    {
+      "title": "Home",
+      "path": "",
+      "children": null
+    },
+    {
+      "title": "Commands",
+      "path": "commands",
+      "children": null
+    },
+    {
+      "title": "File Format",
+      "path": "file-format",
+      "children": null
+    },
+    {
+      "title": "Install",
+      "path": "install",
+      "children": null
+    },
+    {
+      "title": "Philosophy \u0026 FAQ",
+      "path": "philosophy",
+      "children": null
+    },
+    {
+      "title": "Quick Start",
+      "path": "quickstart",
+      "children": null
+    }
+  ]
+}
