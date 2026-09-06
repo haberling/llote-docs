@@ -78,30 +78,38 @@ body {
     0 30px 60px -20px rgba(46, 15, 5, 0.45);
 }
 
-/* Ring-punched spiral binding along the left edge, always on top of every
-   page. A single tileable radial-gradient "ring" repeated down the strip --
-   see root/CLAUDE-facing plan notes: no page-flip library does spiral
-   binding specifically, this is hand-built. */
+/* Spiral binding along the left edge, always on top of every page. Real
+   ring artwork (img/ring-full.svg, img/ring-half.svg), used in its own
+   native landscape orientation -- each ring pokes out sideways from the
+   spine, so the tile is centered ON the page edge (half in, half out),
+   not rotated into a vertical strip. One ring per tile via
+   background-repeat: repeat-y. ring-half is missing the far loop-end
+   (occluded by the thick cover board) and is swapped in only while the
+   cover page is showing, via #notebook.on-cover toggled from
+   root-copy/js/notebook.js. */
 .spiral {
   position: absolute;
-  left: -14px;
+  left: -24px;
   top: 1%;
   /* Matches .page's own `bottom: 2.25rem` (the reserved control-dock strip)
      so the rings stop flush at the page stack's real bottom edge instead
-     of running past it, over the dock, at the old 4%-of-notebook offset. */
+     of running past it, over the dock. */
   bottom: 2.25rem;
-  width: 28px;
+  width: 48px;
   z-index: 900;
-  background-image: radial-gradient(
-    circle at 14px 14px,
-    transparent 0 5px,
-    var(--wire) 5px 7px,
-    transparent 7px 100%
-  );
-  background-size: 100% 28px;
-  background-repeat: repeat-y;
+  background-image: url("/img/ring-full.svg");
+  background-size: 48px 42px;
+  /* `space` instead of `repeat-y`: the strip's height is never an exact
+     multiple of the tile height, and repeat-y clips the last tile rather
+     than skip it -- space distributes the leftover into the gaps instead,
+     so every ring is always whole. */
+  background-repeat: no-repeat space;
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
   pointer-events: none;
+}
+
+#notebook.on-cover .spiral {
+  background-image: url("/img/ring-half.svg");
 }
 
 /* ---------------------------------------------------------------------

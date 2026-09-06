@@ -101,6 +101,39 @@ function updateControls() {
   document.title = current === 0 ? "llote" : `llote — ${PAGES[current].title}`;
 }
 
+function flipDurationMs() {
+  const raw = getComputedStyle(document.documentElement).getPropertyValue("--flip-duration");
+  return (parseFloat(raw) || 0) * 1000;
+}
+
+let spiralArtTimer = null;
+
+// The cover is the outermost, thick board -- it occludes the far side of
+// each ring loop, so .spiral swaps to the half-ring artwork while it's
+// showing (see css/theme.css's #notebook.on-cover rule). Opening the book
+// (leaving the cover) delays that swap until roughly when the cover's
+// actually swung out of the way mid-flip, rather than snapping the ring
+// art the instant the click happens, still mid-animation. Closing the
+// book (arriving back at the cover) is the opposite: the cover starts
+// occluding again immediately, so that swap is never delayed.
+function updateSpiralArt(animate) {
+  if (spiralArtTimer !== null) {
+    clearTimeout(spiralArtTimer);
+    spiralArtTimer = null;
+  }
+  const onCover = current === 0;
+  if (onCover) {
+    notebook.classList.add("on-cover");
+  } else if (animate) {
+    spiralArtTimer = setTimeout(() => {
+      spiralArtTimer = null;
+      notebook.classList.remove("on-cover");
+    }, flipDurationMs() * 0.5);
+  } else {
+    notebook.classList.remove("on-cover");
+  }
+}
+
 function applyState(animate) {
   pageEls.forEach((el, i) => {
     const flipped = i < current;
@@ -119,6 +152,7 @@ function applyState(animate) {
   });
   applyStacking();
   updateControls();
+  updateSpiralArt(animate);
 }
 
 async function init() {
