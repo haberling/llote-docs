@@ -35,7 +35,8 @@
     // curtain.cs on every page build:
     // "curtain": { "command": "tools/bin/curtain.exe", "source": "tools/curtain.cs" },
     "curtain": "dotnet run tools/curtain.cs",
-    "page-number": "dotnet run tools/page-number.cs"
+    "page-number": "dotnet run tools/page-number.cs",
+    "download-doc": "dotnet run tools/download-doc.cs"
   },
   "initialized": true
 }

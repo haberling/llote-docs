@@ -1,0 +1,23 @@
+/*
+ * Styling for archive-link.html -- a plain list, not a downloads card.
+ * Ink color is set in theme.css like the other widgets on this paper.
+ */
+
+.archive-link-widget {
+  list-style: none;
+  padding: 0;
+  margin: 0.25rem 0 0;
+}
+
+.archive-link-widget li {
+  margin: 0 0 0.35rem;
+}
+
+.archive-link-widget a {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.archive-link-updated {
+  font-style: normal;
+}

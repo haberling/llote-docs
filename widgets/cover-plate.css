@@ -1,0 +1,48 @@
+/*
+ * Mid-90s boxed-software cover stamp (cover-plate.html). Ink color and
+ * the publisher's seat on the cover board are in theme.css -- this file
+ * is just the type: tracked labels, a ruled edition line, italic platform.
+ */
+
+.cover-plate-widget p {
+  margin: 0;
+}
+
+.cover-plate-version {
+  margin-top: 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.cover-plate-edition {
+  margin-top: 0.85rem;
+  padding: 0.4rem 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  border-top: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  width: min(14rem, 80%);
+}
+
+.cover-plate-platform {
+  margin-top: 0.55rem;
+  font-size: 0.85rem;
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+
+.cover-plate-publisher {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+}
+
+.cover-plate-copy {
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+}

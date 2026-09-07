@@ -1,0 +1,21 @@
+<!--
+  Slim list of file links for the Docs Archive page. Each row is a real
+  <a download> so Canary's router (router.js isInterceptable) leaves the
+  click alone -- a same-origin href without download would be treated as
+  a notebook route and land on the cover. See archive-link.css.
+-->
+<!--clipboard
+```archive-link
+items:
+  - label: "llote docs v1.0.0.0"
+    url: "/docs-downloads/llote-docs-v1.0.0.0.md"
+    updated: "2026-09-07"
+```
+-->
+<ul class="archive-link-widget" data-widget="archive-link">
+  {{#items}}
+  <li>
+    <a href="{{url}}" download>{{label}}</a>{{#updated}} - last updated on <time class="archive-link-updated" datetime="{{updated}}">{{updated}}</time>{{/updated}}
+  </li>
+  {{/items}}
+</ul>

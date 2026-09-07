@@ -283,20 +283,33 @@ body {
   margin: 0 auto 1rem;
 }
 
-/* Cover page (always PAGES[0], see root-copy/js/notebook.js) gets its own
-   treatment -- just the mark and a big friendly wordmark underneath it,
-   nothing else. content/index.md puts the image before the "# llote"
-   heading, so plain block flow already stacks them mark-then-wordmark. */
+/* Cover page (always PAGES[0], see root-copy/js/notebook.js): the mark
+   and wordmark stay centered as before; content/index.md then drops a
+   cover-plate widget (version / User's Guide / for Windows) under the
+   title, with the publisher at the bottom of the same 46ch column -- not
+   the full sheet, whose center is left of the content because of the
+   spiral padding. */
+.notebook > .page:first-of-type .page-scroll,
+#notebook.on-cover .read-window {
+  display: flex;
+  flex-direction: column;
+}
+
 .notebook > .page:first-of-type .page-content,
 #notebook.on-cover .read-window .page-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
   text-align: center;
-  padding-top: 10%;
+  padding-top: 8%;
 }
 
 .notebook > .page:first-of-type .page-content img,
 #notebook.on-cover .read-window .page-content img {
-  max-width: 70%;
-  margin-bottom: 1.5rem;
+  max-width: 62%;
+  margin-bottom: 1.15rem;
 }
 
 /* Cover is a solid-color board, front and back -- like a real notebook's
@@ -315,6 +328,26 @@ body {
   font-weight: 700;
   letter-spacing: -0.01em;
   margin: 0;
+}
+
+.notebook > .page:first-of-type .cover-plate-widget,
+#notebook.on-cover .read-window .cover-plate-widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+  color: var(--ink);
+}
+
+.notebook > .page:first-of-type .cover-plate-publisher,
+#notebook.on-cover .read-window .cover-plate-publisher {
+  margin-top: auto;
+}
+
+.notebook > .page:first-of-type .cover-plate-copy,
+#notebook.on-cover .read-window .cover-plate-copy {
+  margin-top: 0.15rem;
 }
 
 .page-content code {
@@ -355,6 +388,14 @@ body {
 
 .page-content .downloads-widget a.download-button {
   background: color-mix(in srgb, var(--ink) 5%, var(--paper));
+}
+
+.page-content .archive-link-widget a {
+  color: var(--ink);
+}
+
+.page-content .archive-link-widget a:hover {
+  color: var(--accent);
 }
 
 .page-content .copy-command-label {
@@ -523,5 +564,21 @@ body {
 
   .page-content h1 {
     font-size: 1.5rem;
+  }
+
+  .notebook > .page:first-of-type .page-content,
+  #notebook.on-cover .read-window .page-content {
+    padding-top: 5%;
+  }
+
+  .notebook > .page:first-of-type .page-content img,
+  #notebook.on-cover .read-window .page-content img {
+    max-width: 52%;
+    margin-bottom: 0.85rem;
+  }
+
+  .notebook > .page:first-of-type .page-content h1,
+  #notebook.on-cover .read-window .page-content h1 {
+    font-size: 2.6rem;
   }
 }

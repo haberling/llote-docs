@@ -76,6 +76,11 @@
       "title": "License",
       "path": "license",
       "children": null
+    },
+    {
+      "title": "Docs Archive",
+      "path": "docs-archive",
+      "children": null
     }
   ]
 }
