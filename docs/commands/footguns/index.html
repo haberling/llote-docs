@@ -28,7 +28,7 @@
 <span class="corner-tag-widget" data-widget="corner-tag">Commands - Footguns</span>
 
 <p>A first argument ending in <code>.llote</code> is always a file path, never note text. <code>llote called-the-dentist.llote</code> tries to list that file. The match is case-sensitive, so <code>log.LLOTE</code> would actually get logged as a note.</p>
-<p><code>new</code>, <code>setup</code>, <code>pop</code>, <code>ask</code>, <code>browse</code>, and <code>help</code> are reserved as the first word. <code>llote pop</code> does not write a note that says "pop" — it offers to delete your last one (y/N, default no). To log a reserved word, pass it as the second argument after a file: <code>llote log.llote pop</code>.</p>
+<p><code>new</code>, <code>setup</code>, <code>pop</code>, <code>ask</code>, <code>browse</code>, <code>docs</code>, and <code>help</code> are reserved as the first word. <code>llote pop</code> does not write a note that says "pop" — it offers to delete your last one (y/N, default no). To log a reserved word, pass it as the second argument after a file: <code>llote log.llote pop</code>.</p>
 <p>Extra words after a command are an error — <code>llote browse notes</code> without the <code>.llote</code> suffix is unrecognized.</p>
 
 

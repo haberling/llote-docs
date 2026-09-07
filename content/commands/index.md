@@ -16,5 +16,6 @@ text: "Commands"
 - `llote ask "question"` — semantic search over your notes
 - `llote browse` — pageable TUI over the default file
 - `llote browse <file.llote>` — same, over that file
+- `llote docs` — print this site's URL
 - `llote help` — print the command structure
 

@@ -167,14 +167,9 @@ body {
   transform: rotateY(0deg);
   transition: transform var(--flip-duration) cubic-bezier(0.45, 0.05, 0.55, 0.95);
   border-radius: 6px;
-  /* Flipped sheets keep a higher z-index than the current one, and their
-     layout box still covers the notebook. Touch hit-testing often uses
-     that box, not the 3D-rotated shape, so they would steal the pan. */
+  /* The 3D deck is display-only. Touch goes to .read-window, which is
+     not a descendant of a transformed / backface-hidden plane. */
   pointer-events: none;
-}
-
-.page.current {
-  pointer-events: auto;
 }
 
 .page.no-anim {
@@ -185,9 +180,6 @@ body {
   transform: rotateY(-180deg);
 }
 
-/* Resting current sheet is a flat paper window, not a 3D plane: overflow
-   scrolling on a preserve-3d / backface-hidden descendant does not pan
-   on phones even when a scrollbar paints. */
 .page.current:not(.turning) {
   transform: none;
   transform-style: flat;
@@ -216,28 +208,39 @@ body {
   backface-visibility: visible;
 }
 
-/* The paper window. Only the current sheet scrolls -- other pages with
-   tall content used to paint a bar on the stack that did not move this
-   window. */
+/* Holds the current page's markup during a flip so the turning sheet
+   still shows its text. At rest the markup is moved into .read-window. */
 .page-scroll {
   flex: 1 1 auto;
   min-height: 0;
   width: 100%;
   overflow: hidden;
-  overscroll-behavior: contain;
-  /* Vertical only: pan-x lets the browser own the horizontal gesture,
-     and a working overflow scroller then never hands it to the swipe
-     listener. Horizontal stays a JS swipe (see notebook.js). */
-  touch-action: pan-y;
+  padding: 3.25rem 1.75rem 2rem 3rem;
 }
 
-.page.current .page-scroll {
+/* Reading surface: sibling of the 3D pages, not inside them. Native
+   overflow on a preserve-3d / backface-hidden descendant does not pan
+   on phones (scrollbar can still paint). touch-action:none so the
+   browser cannot steal the gesture; notebook.js pans Y and swipes X. */
+.read-window {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 2.25rem;
+  z-index: 800;
   overflow-x: hidden;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: none;
+  padding: 3.25rem 1.75rem 2rem 3rem;
+  border-radius: 6px;
 }
 
-.face-front .page-scroll {
-  padding: 3.25rem 1.75rem 2rem 3rem;
+.read-window.is-away,
+.notebook:has(.page.turning) .read-window {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .face-back {
@@ -284,12 +287,14 @@ body {
    treatment -- just the mark and a big friendly wordmark underneath it,
    nothing else. content/index.md puts the image before the "# llote"
    heading, so plain block flow already stacks them mark-then-wordmark. */
-.notebook > .page:first-of-type .page-content {
+.notebook > .page:first-of-type .page-content,
+#notebook.on-cover .read-window .page-content {
   text-align: center;
   padding-top: 10%;
 }
 
-.notebook > .page:first-of-type .page-content img {
+.notebook > .page:first-of-type .page-content img,
+#notebook.on-cover .read-window .page-content img {
   max-width: 70%;
   margin-bottom: 1.5rem;
 }
@@ -304,7 +309,8 @@ body {
   background-image: none;
 }
 
-.notebook > .page:first-of-type .page-content h1 {
+.notebook > .page:first-of-type .page-content h1,
+#notebook.on-cover .read-window .page-content h1 {
   font-size: 3.75rem;
   font-weight: 700;
   letter-spacing: -0.01em;
@@ -484,7 +490,8 @@ body {
     width: 96vw;
   }
 
-  .face-front .page-scroll {
+  .page-scroll,
+  .read-window {
     padding: 2.75rem 1.25rem 1.5rem 2.25rem;
   }
 

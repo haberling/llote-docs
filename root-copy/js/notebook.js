@@ -66,6 +66,15 @@ const prevLink = document.getElementById("nb-prev");
 const nextLink = document.getElementById("nb-next");
 const indicator = document.getElementById("nb-indicator");
 
+// Flat reading surface, sibling of the 3D .page stack -- not inside it.
+// Overflow scrolling a preserve-3d / backface-hidden descendant does not
+// pan on phones; the documented workaround is to scroll a layer that is
+// not transformed. Markup is moved here at rest and back onto the turning
+// sheet for the flip.
+const readWindow = document.createElement("div");
+readWindow.className = "read-window is-away";
+notebook.insertBefore(readWindow, appEl);
+
 let PAGES = [];
 let current = 0;
 // Route changes can fire (router.js dispatches on load) before loadPages()'s
@@ -219,6 +228,37 @@ function updateSpiralArt(animate, prevIndex) {
   }
 }
 
+function contentEl(i) {
+  if (i === current) {
+    const mounted = readWindow.querySelector(".page-content");
+    if (mounted) return mounted;
+  }
+  return pageEls[i]?.querySelector(".page-content") ?? null;
+}
+
+function unmountReadWindow() {
+  const content = readWindow.querySelector(".page-content");
+  if (!content) {
+    readWindow.classList.add("is-away");
+    return;
+  }
+  const idx = Number(content.dataset.pageIndex);
+  const scroller = pageEls[idx]?.querySelector(".page-scroll");
+  if (scroller) scroller.appendChild(content);
+  readWindow.classList.add("is-away");
+}
+
+function mountReadWindow() {
+  const pageEl = pageEls[current];
+  const content = pageEl?.querySelector(".page-content");
+  if (content) readWindow.appendChild(content);
+  readWindow.scrollTop = 0;
+  readWindow.classList.remove("is-away");
+  applyCondensedIfNeeded(current);
+}
+
+let flipGen = 0;
+
 function applyState(animate, prevIndex) {
   // The page that actually plays the flip transition -- see applyStacking()'s
   // comment for why it needs a temporary z-index boost while it's turning.
@@ -230,6 +270,8 @@ function applyState(animate, prevIndex) {
   // time, so letting several pages animate together would z-fight; snapping
   // the rest keeps the illusion of a single turn landing on the target page
   // while every page's actual state still ends up correct.
+  const gen = ++flipGen;
+  unmountReadWindow();
   const turningIndex = animate ? Math.min(prevIndex, current) : null;
   pageEls.forEach((el, i) => {
     const flipped = i < current;
@@ -248,23 +290,37 @@ function applyState(animate, prevIndex) {
       el.addEventListener("transitionend", () => {
         el.classList.remove("turning");
         applyStacking();
+        if (gen === flipGen) mountReadWindow();
       }, { once: true });
     }
   });
   applyStacking(turningIndex);
   updateControls();
   updateSpiralArt(animate, prevIndex);
+  if (!animate) {
+    mountReadWindow();
+  } else {
+    setTimeout(() => {
+      if (gen !== flipGen || readWindow.querySelector(".page-content")) return;
+      pageEls[turningIndex]?.classList.remove("turning");
+      applyStacking();
+      mountReadWindow();
+    }, flipDurationMs() + 80);
+  }
 }
 
 // A single fallback step, not a shrink-to-fit loop: if a page's natural
 // content is taller than the space it has, drop the font-size one step
 // (see .page-content.is-condensed in theme.css) and accept whatever height
 // that produces. Content still too tall after this one step scrolls
-// inside .page-scroll rather than shrinking indefinitely.
-function applyCondensedIfNeeded(pageEl) {
-  const content = pageEl.querySelector(".page-content");
-  const scroller = pageEl.querySelector(".page-scroll");
-  if (!content || !scroller) return;
+// inside .read-window rather than shrinking indefinitely.
+function applyCondensedIfNeeded(i) {
+  const content = contentEl(i);
+  if (!content) return;
+  const scroller = (i === current && readWindow.contains(content))
+    ? readWindow
+    : pageEls[i].querySelector(".page-scroll");
+  if (!scroller) return;
   content.classList.remove("is-condensed");
   if (scroller.scrollHeight > scroller.clientHeight) {
     content.classList.add("is-condensed");
@@ -277,8 +333,10 @@ async function init() {
   pageEls = PAGES.map(() => buildPageEl());
   const contents = await Promise.all(PAGES.map((p) => fetchContent(p.path)));
   contents.forEach((html, i) => {
-    pageEls[i].querySelector(".page-content").innerHTML = html;
-    applyCondensedIfNeeded(pageEls[i]);
+    const content = pageEls[i].querySelector(".page-content");
+    content.dataset.pageIndex = String(i);
+    content.innerHTML = html;
+    applyCondensedIfNeeded(i);
   });
   appEl.style.display = "none";
   ready = true;
@@ -312,7 +370,7 @@ window.addEventListener("resize", () => {
   if (!ready) return;
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
-    pageEls.forEach(applyCondensedIfNeeded);
+    pageEls.forEach((_, i) => applyCondensedIfNeeded(i));
   }, 150);
 });
 
@@ -330,27 +388,35 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-// Finger swipe: left = next page, right = previous. Uses touch events
-// (not pointer) so Chrome/Edge device-mode emulation actually fires.
-// Capture + preventDefault on the X axis so the paper scroller cannot
-// claim a horizontal pan. Vertical motion stays native scroll.
-// Mouse drag is ignored.
+// Finger pan on .read-window. touch-action:none (see theme.css) so the
+// browser does not own the gesture: pan-y on a scroller is why swipe only
+// worked from the screen edge (the few pixels of .desk that are not the
+// paper). Y is applied to scrollTop; X turns the page. Mouse is ignored.
 const SWIPE_AXIS = 12;
 const SWIPE_TURN = 50;
 let swipe = null;
 let swallowClick = false;
+let coast = 0;
 
-notebook.addEventListener("touchstart", (e) => {
+readWindow.addEventListener("touchstart", (e) => {
   if (!ready || e.touches.length !== 1) {
     swipe = null;
     return;
   }
-  if (e.target.closest(".notebook-controls")) return;
   const t = e.touches[0];
-  swipe = { x: t.clientX, y: t.clientY, axis: null };
-}, { passive: true, capture: true });
+  coast += 1;
+  swipe = {
+    x: t.clientX,
+    y: t.clientY,
+    scroll: readWindow.scrollTop,
+    axis: null,
+    lastY: t.clientY,
+    lastT: performance.now(),
+    vy: 0,
+  };
+}, { passive: true });
 
-notebook.addEventListener("touchmove", (e) => {
+readWindow.addEventListener("touchmove", (e) => {
   if (!swipe || e.touches.length !== 1) return;
   const t = e.touches[0];
   const dx = t.clientX - swipe.x;
@@ -359,19 +425,37 @@ notebook.addEventListener("touchmove", (e) => {
     if (Math.abs(dx) < SWIPE_AXIS && Math.abs(dy) < SWIPE_AXIS) return;
     swipe.axis = Math.abs(dx) > Math.abs(dy) * 1.2 ? "x" : "y";
   }
-  if (swipe.axis === "x") e.preventDefault();
-}, { passive: false, capture: true });
+  e.preventDefault();
+  if (swipe.axis === "y") {
+    const now = performance.now();
+    const dt = Math.max(1, now - swipe.lastT);
+    swipe.vy = (t.clientY - swipe.lastY) / dt;
+    swipe.lastY = t.clientY;
+    swipe.lastT = now;
+    readWindow.scrollTop = swipe.scroll - dy;
+  }
+}, { passive: false });
 
-notebook.addEventListener("touchend", (e) => {
+readWindow.addEventListener("touchend", (e) => {
   if (!swipe) return;
   const t = e.changedTouches[0];
   const dx = t.clientX - swipe.x;
   const axis = swipe.axis;
+  const vy = swipe.vy;
   swipe = null;
+  if (axis === "y") {
+    const token = coast;
+    let v = vy * 16;
+    const step = () => {
+      if (token !== coast) return;
+      v *= 0.95;
+      readWindow.scrollTop -= v;
+      if (Math.abs(v) > 0.4) requestAnimationFrame(step);
+    };
+    if (Math.abs(v) > 2) requestAnimationFrame(step);
+    return;
+  }
   if (axis !== "x") return;
-  // Click first, then arm the swallow: the capture click listener lives
-  // on #notebook, which is an ancestor of these links, so setting the
-  // flag beforehand cancel/stops this click and the page never turns.
   if (dx <= -SWIPE_TURN && !nextLink.hasAttribute("aria-disabled")) {
     nextLink.click();
     swallowClick = true;
@@ -379,13 +463,13 @@ notebook.addEventListener("touchend", (e) => {
     prevLink.click();
     swallowClick = true;
   }
-}, { capture: true });
+});
 
-notebook.addEventListener("touchcancel", () => {
+readWindow.addEventListener("touchcancel", () => {
   swipe = null;
-}, { capture: true });
+});
 
-notebook.addEventListener("click", (e) => {
+readWindow.addEventListener("click", (e) => {
   if (!swallowClick) return;
   swallowClick = false;
   e.preventDefault();
