@@ -239,6 +239,7 @@ function applyState(animate, prevIndex) {
     }
     el.classList.add("turning");
     el.classList.toggle("flipped", flipped);
+    el.classList.toggle("current", i === current);
     if (!isTurning) {
       void el.offsetWidth; // force reflow so the no-anim transition-less state actually applies
       el.classList.remove("no-anim");
@@ -331,7 +332,9 @@ document.addEventListener("keydown", (e) => {
 
 // Finger swipe: left = next page, right = previous. Uses touch events
 // (not pointer) so Chrome/Edge device-mode emulation actually fires.
-// Vertical motion stays native scroll. Mouse drag is ignored.
+// Capture + preventDefault on the X axis so the paper scroller cannot
+// claim a horizontal pan. Vertical motion stays native scroll.
+// Mouse drag is ignored.
 const SWIPE_AXIS = 12;
 const SWIPE_TURN = 50;
 let swipe = null;
@@ -345,7 +348,7 @@ notebook.addEventListener("touchstart", (e) => {
   if (e.target.closest(".notebook-controls")) return;
   const t = e.touches[0];
   swipe = { x: t.clientX, y: t.clientY, axis: null };
-}, { passive: true });
+}, { passive: true, capture: true });
 
 notebook.addEventListener("touchmove", (e) => {
   if (!swipe || e.touches.length !== 1) return;
@@ -357,7 +360,7 @@ notebook.addEventListener("touchmove", (e) => {
     swipe.axis = Math.abs(dx) > Math.abs(dy) * 1.2 ? "x" : "y";
   }
   if (swipe.axis === "x") e.preventDefault();
-}, { passive: false });
+}, { passive: false, capture: true });
 
 notebook.addEventListener("touchend", (e) => {
   if (!swipe) return;
@@ -366,18 +369,21 @@ notebook.addEventListener("touchend", (e) => {
   const axis = swipe.axis;
   swipe = null;
   if (axis !== "x") return;
+  // Click first, then arm the swallow: the capture click listener lives
+  // on #notebook, which is an ancestor of these links, so setting the
+  // flag beforehand cancel/stops this click and the page never turns.
   if (dx <= -SWIPE_TURN && !nextLink.hasAttribute("aria-disabled")) {
-    swallowClick = true;
     nextLink.click();
-  } else if (dx >= SWIPE_TURN && !prevLink.hasAttribute("aria-disabled")) {
     swallowClick = true;
+  } else if (dx >= SWIPE_TURN && !prevLink.hasAttribute("aria-disabled")) {
     prevLink.click();
+    swallowClick = true;
   }
-});
+}, { capture: true });
 
 notebook.addEventListener("touchcancel", () => {
   swipe = null;
-});
+}, { capture: true });
 
 notebook.addEventListener("click", (e) => {
   if (!swallowClick) return;
