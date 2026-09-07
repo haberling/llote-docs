@@ -142,7 +142,7 @@ function updateControls() {
   nextLink.tabIndex = atEnd ? -1 : 0;
 
   indicator.textContent = `${current + 1} / ${total} — ${PAGES[current].title}`;
-  document.title = current === 0 ? "llote" : `llote — ${PAGES[current].title}`;
+  document.title = PAGES[current].title;
 }
 
 function flipDurationMs() {
@@ -327,6 +327,10 @@ document.addEventListener("keydown", (e) => {
     prevLink.click();
   }
 });
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js");
+}
 
 init();
 start();

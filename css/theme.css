@@ -23,6 +23,22 @@
   --flip-duration: 0.7s;
 }
 
+@font-face {
+  font-family: "Arvo";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/arvo-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Arvo";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/arvo-700.woff2") format("woff2");
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --flip-duration: 0.001s;
