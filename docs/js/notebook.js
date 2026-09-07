@@ -236,12 +236,40 @@ function contentEl(i) {
   return pageEls[i]?.querySelector(".page-content") ?? null;
 }
 
+// Corner chrome (page-number, corner-tag) is written into the markdown,
+// so `position: absolute` against .read-window (the scroll container)
+// rides the paper. Park both as direct children of #notebook while the
+// page is being read; put them back before a flip so the turning sheet
+// still shows them in the corners of .face.
+const CORNER_WIDGETS = [".page-number-widget", ".corner-tag-widget"];
+
+function parkCornerWidgets(content) {
+  if (!content) return;
+  for (const sel of CORNER_WIDGETS) {
+    const el = content.querySelector(sel);
+    if (!el) continue;
+    el.classList.add("is-docked");
+    notebook.appendChild(el);
+  }
+}
+
+function restoreCornerWidgets(content) {
+  if (!content) return;
+  for (const sel of CORNER_WIDGETS) {
+    const el = notebook.querySelector(`:scope > ${sel}.is-docked`);
+    if (!el) continue;
+    el.classList.remove("is-docked");
+    content.appendChild(el);
+  }
+}
+
 function unmountReadWindow() {
   const content = readWindow.querySelector(".page-content");
   if (!content) {
     readWindow.classList.add("is-away");
     return;
   }
+  restoreCornerWidgets(content);
   const idx = Number(content.dataset.pageIndex);
   const scroller = pageEls[idx]?.querySelector(".page-scroll");
   if (scroller) scroller.appendChild(content);
@@ -252,6 +280,7 @@ function mountReadWindow() {
   const pageEl = pageEls[current];
   const content = pageEl?.querySelector(".page-content");
   if (content) readWindow.appendChild(content);
+  parkCornerWidgets(content);
   readWindow.scrollTop = 0;
   readWindow.classList.remove("is-away");
   applyCondensedIfNeeded(current);

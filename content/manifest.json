@@ -66,6 +66,16 @@
       "title": "Philosophy \u0026 FAQ",
       "path": "philosophy",
       "children": null
+    },
+    {
+      "title": "Privacy Policy",
+      "path": "privacy",
+      "children": null
+    },
+    {
+      "title": "License",
+      "path": "license",
+      "children": null
     }
   ]
 }

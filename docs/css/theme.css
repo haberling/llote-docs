@@ -389,6 +389,32 @@ body {
   color: var(--ink);
 }
 
+/* Lifted out of the scrolling paper by notebook.js (see parkCornerWidgets).
+   Same 1rem / 1.25rem inset as the widgets' own CSS; the page-number also
+   clears the 2.25rem dock strip that .page and .read-window already reserve. */
+.page-number-widget.is-docked,
+.corner-tag-widget.is-docked {
+  position: absolute;
+  right: 1.25rem;
+  z-index: 850;
+  pointer-events: none;
+  color: var(--ink);
+}
+
+.page-number-widget.is-docked {
+  bottom: calc(2.25rem + 1rem);
+}
+
+.corner-tag-widget.is-docked {
+  top: 1rem;
+  text-transform: none;
+}
+
+#notebook.on-cover > .page-number-widget.is-docked,
+#notebook.on-cover > .corner-tag-widget.is-docked {
+  display: none;
+}
+
 /* Depth cue: a shadow that rises and falls once per flip, synced via the
    .turning class added right when a flip starts and removed on
    transitionend (see root-copy/js/notebook.js). */
