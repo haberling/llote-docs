@@ -80,7 +80,9 @@ function buildPageEl() {
   page.className = "page";
   page.innerHTML = `
     <div class="face face-front">
-      <div class="page-content"></div>
+      <div class="page-scroll">
+        <div class="page-content"></div>
+      </div>
       <span class="shadow" aria-hidden="true"></span>
     </div>
     <div class="face face-back">
@@ -257,14 +259,13 @@ function applyState(animate, prevIndex) {
 // content is taller than the space it has, drop the font-size one step
 // (see .page-content.is-condensed in theme.css) and accept whatever height
 // that produces. Content still too tall after this one step scrolls
-// internally same as always (.face has its own overflow: auto) rather than
-// shrinking indefinitely.
+// inside .page-scroll rather than shrinking indefinitely.
 function applyCondensedIfNeeded(pageEl) {
   const content = pageEl.querySelector(".page-content");
-  const face = pageEl.querySelector(".face-front");
-  if (!content || !face) return;
+  const scroller = pageEl.querySelector(".page-scroll");
+  if (!content || !scroller) return;
   content.classList.remove("is-condensed");
-  if (face.scrollHeight > face.clientHeight) {
+  if (scroller.scrollHeight > scroller.clientHeight) {
     content.classList.add("is-condensed");
   }
 }
@@ -327,6 +328,63 @@ document.addEventListener("keydown", (e) => {
     prevLink.click();
   }
 });
+
+// Finger swipe: left = next page, right = previous. Uses touch events
+// (not pointer) so Chrome/Edge device-mode emulation actually fires.
+// Vertical motion stays native scroll. Mouse drag is ignored.
+const SWIPE_AXIS = 12;
+const SWIPE_TURN = 50;
+let swipe = null;
+let swallowClick = false;
+
+notebook.addEventListener("touchstart", (e) => {
+  if (!ready || e.touches.length !== 1) {
+    swipe = null;
+    return;
+  }
+  if (e.target.closest(".notebook-controls")) return;
+  const t = e.touches[0];
+  swipe = { x: t.clientX, y: t.clientY, axis: null };
+}, { passive: true });
+
+notebook.addEventListener("touchmove", (e) => {
+  if (!swipe || e.touches.length !== 1) return;
+  const t = e.touches[0];
+  const dx = t.clientX - swipe.x;
+  const dy = t.clientY - swipe.y;
+  if (swipe.axis === null) {
+    if (Math.abs(dx) < SWIPE_AXIS && Math.abs(dy) < SWIPE_AXIS) return;
+    swipe.axis = Math.abs(dx) > Math.abs(dy) * 1.2 ? "x" : "y";
+  }
+  if (swipe.axis === "x") e.preventDefault();
+}, { passive: false });
+
+notebook.addEventListener("touchend", (e) => {
+  if (!swipe) return;
+  const t = e.changedTouches[0];
+  const dx = t.clientX - swipe.x;
+  const axis = swipe.axis;
+  swipe = null;
+  if (axis !== "x") return;
+  if (dx <= -SWIPE_TURN && !nextLink.hasAttribute("aria-disabled")) {
+    swallowClick = true;
+    nextLink.click();
+  } else if (dx >= SWIPE_TURN && !prevLink.hasAttribute("aria-disabled")) {
+    swallowClick = true;
+    prevLink.click();
+  }
+});
+
+notebook.addEventListener("touchcancel", () => {
+  swipe = null;
+});
+
+notebook.addEventListener("click", (e) => {
+  if (!swallowClick) return;
+  swallowClick = false;
+  e.preventDefault();
+  e.stopPropagation();
+}, true);
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("/sw.js");
