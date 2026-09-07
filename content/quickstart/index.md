@@ -1,5 +1,9 @@
 # Quick Start
 
+```corner-tag
+text: "Quick Start"
+```
+
 ```code
 lang: text
 lines:

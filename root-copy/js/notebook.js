@@ -253,6 +253,22 @@ function applyState(animate, prevIndex) {
   updateSpiralArt(animate, prevIndex);
 }
 
+// A single fallback step, not a shrink-to-fit loop: if a page's natural
+// content is taller than the space it has, drop the font-size one step
+// (see .page-content.is-condensed in theme.css) and accept whatever height
+// that produces. Content still too tall after this one step scrolls
+// internally same as always (.face has its own overflow: auto) rather than
+// shrinking indefinitely.
+function applyCondensedIfNeeded(pageEl) {
+  const content = pageEl.querySelector(".page-content");
+  const face = pageEl.querySelector(".face-front");
+  if (!content || !face) return;
+  content.classList.remove("is-condensed");
+  if (face.scrollHeight > face.clientHeight) {
+    content.classList.add("is-condensed");
+  }
+}
+
 async function init() {
   PAGES = await loadPages();
   current = indexForPath(pendingPath);
@@ -260,6 +276,7 @@ async function init() {
   const contents = await Promise.all(PAGES.map((p) => fetchContent(p.path)));
   contents.forEach((html, i) => {
     pageEls[i].querySelector(".page-content").innerHTML = html;
+    applyCondensedIfNeeded(pageEls[i]);
   });
   appEl.style.display = "none";
   ready = true;
@@ -279,6 +296,22 @@ registerRouteHandler((route) => {
   const animate = idx !== current;
   current = idx;
   applyState(animate, prevIndex);
+});
+
+// The notebook's own size is viewport-relative (see .notebook in
+// theme.css), so a resize can change whether a page's content actually
+// overflows -- re-checked for every page, debounced so a drag-resize
+// doesn't force layout on every intermediate frame. Each check starts from
+// the un-condensed state (see applyCondensedIfNeeded), so this also
+// reverts a page that no longer needs it once the window's big enough
+// again, rather than only ever ratcheting one way.
+let resizeTimer = null;
+window.addEventListener("resize", () => {
+  if (!ready) return;
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    pageEls.forEach(applyCondensedIfNeeded);
+  }, 150);
 });
 
 // prefers-reduced-motion is handled purely in CSS (see theme.css) --

@@ -1,6 +1,10 @@
 # Install
 
-llote is a Windows command-line tool and tui, available from two places:
+```corner-tag
+text: "Install"
+```
+
+llote is a Windows command-line tool and TUI, available from two places:
 
 ```downloads
 title: Get llote
@@ -11,6 +15,6 @@ items:
     url: "https://consoland.net/utilities/llote"
 ```
 
-* The store download allows less fine grained control of the uninstall process. *
+* The Store download gives you less fine-grained control over the uninstall process. *
 
-Once installed, you can run llote from the command line `llote`. Or from the start menu's program registration.
+Once installed, you can run llote from the command line (`llote`) or from the Start menu.

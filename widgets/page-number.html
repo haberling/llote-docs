@@ -1,0 +1,15 @@
+<!--
+  Standard widget contract (see widgets/downloads.html for the full
+  write-up): a plain Mustache-syntax HTML template, filled from the fence
+  block's YAML body. Takes a single "current" field -- set by the
+  "page-number" toolchain tool (tools/page-number.cs), not hand-written in
+  any page's own markdown. See page-number.css for how this is pinned to
+  the page's bottom-right corner, mirroring corner-tag.html's top-right
+  placement.
+-->
+<!--clipboard
+```page-number
+current: 3
+```
+-->
+<span class="page-number-widget" data-widget="page-number">{{current}}</span>

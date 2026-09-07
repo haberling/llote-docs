@@ -34,6 +34,7 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100%;
+  overflow: hidden;
 }
 
 body {
@@ -181,6 +182,15 @@ body {
   margin: 0 auto;
 }
 
+/* Toggled by notebook.js's applyCondensedIfNeeded() when a page's content
+   is taller than it has room for -- a single step down, not a shrink-to-
+   fit scale. em, not rem, so it only affects text that inherits size from
+   .page-content (paragraphs, lists, code) -- .page-content h1 below stays
+   its own fixed rem size regardless, same as every other page's heading. */
+.page-content.is-condensed {
+  font-size: 0.9em;
+}
+
 .page-content h1 {
   font-size: 1.9rem;
   margin: 0 0 1rem;
@@ -286,6 +296,24 @@ body {
 
 .page-content .copy-command-button:hover {
   color: var(--paper);
+}
+
+/* The "corner-tag" widget (widgets/corner-tag.css) has the same
+   dark-theme-token problem as the widgets above -- fixed the same way.
+   Full-strength ink, not the muted treatment the other widgets get above,
+   and no all-caps -- this is meant to read like a plain running-header
+   label, not a stamp. */
+.page-content .corner-tag-widget {
+  color: var(--ink);
+  text-transform: none;
+}
+
+/* The "page-number" widget (widgets/page-number.css) has the same
+   dark-theme-token problem as the widgets above -- fixed the same way,
+   matched to corner-tag's full-strength-ink treatment since it's meant to
+   read as the same running-header style, just the opposite corner. */
+.page-content .page-number-widget {
+  color: var(--ink);
 }
 
 /* Depth cue: a shadow that rises and falls once per flip, synced via the

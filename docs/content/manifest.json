@@ -23,6 +23,38 @@
     {
       "title": "Commands",
       "path": "commands",
+      "children": [
+        {
+          "title": "CLI Tips",
+          "path": "commands/cli-tips",
+          "children": null
+        },
+        {
+          "title": "Footguns",
+          "path": "commands/footguns",
+          "children": null
+        }
+      ]
+    },
+    {
+      "title": "Search",
+      "path": "search",
+      "children": [
+        {
+          "title": "Time Windowing",
+          "path": "search/time-windowing",
+          "children": null
+        },
+        {
+          "title": "Getting the Most Out of Search",
+          "path": "search/tips",
+          "children": null
+        }
+      ]
+    },
+    {
+      "title": "Default File",
+      "path": "default-file",
       "children": null
     },
     {

@@ -1,5 +1,9 @@
 # File Format
 
+```corner-tag
+text: "File Format"
+```
+
 Plain text, append-only, human-editable.
 
 ```code
@@ -12,5 +16,6 @@ lines:
 
 Line one is a header llote uses to key its own search cache in app data —
 never a sidecar file next to your notes. Every other line is a timestamp
-and your text, tab-separated. Hand-edit it, back it up, put it in git —
-it's just text.
+and your text, tab-separated. As plain text, it plays nicely with Git and AI assistants.
+
+Be careful editing a `.llote` file by hand. Damaging the `llote-id` can make the file unopenable (deleting the ID line outright will fix this). Lines without a properly formatted date may be harder for llote to find during an `ask`.

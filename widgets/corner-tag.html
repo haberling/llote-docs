@@ -1,0 +1,14 @@
+<!--
+  Standard widget contract (see widgets/downloads.html for the full
+  write-up): a plain Mustache-syntax HTML template, filled from the fence
+  block's YAML body. This one just takes a single "text" field and renders
+  it as a small pinned label -- meant for a section/subpage name, not
+  general content. See corner-tag.css for how it's actually pinned to the
+  page's top-right corner regardless of where in the markdown it's written.
+-->
+<!--clipboard
+```corner-tag
+text: "Contents"
+```
+-->
+<span class="corner-tag-widget" data-widget="corner-tag">{{text}}</span>

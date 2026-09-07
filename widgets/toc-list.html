@@ -1,0 +1,26 @@
+<!--
+  Standard widget contract (see widgets/downloads.html for the full
+  write-up): a plain Mustache-syntax HTML template, filled from the fence
+  block's YAML body. Exists specifically because Canary's own Markdown
+  ordered-list syntax (MarkdownRenderer.cs's OlRegex) parses and discards
+  the leading number on every line -- it always renders a plain <ol>
+  numbered 1, 2, 3... by the browser, with no way to set a real starting
+  position or skip numbers from Markdown source alone. A real HTML <ol>'s
+  per-<li> "value" attribute doesn't have that limitation, and a widget's
+  template output is real HTML, not re-parsed as Markdown prose -- so this
+  is the built-in table of contents' own numbered list (see
+  tools/toc.ps1, which builds the "items" list below with each entry's
+  real page position, not just its position within this one list).
+-->
+<!--clipboard
+```toc-list
+items:
+  - position: 3
+    title: "Install"
+    url: "/install/"
+  - position: 4
+    title: "Quick Start"
+    url: "/quickstart/"
+```
+-->
+<ol data-widget="toc-list">{{#items}}<li value="{{position}}"><a href="{{url}}">{{title}}</a></li>{{/items}}</ol>

@@ -1,0 +1,57 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Search — llote docs</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&display=swap">
+  <link rel="stylesheet" href="/css/framework.css">
+  <link rel="stylesheet" href="/css/theme.css">
+  <link rel="stylesheet" href="/css/widgets/code.css">
+<link rel="stylesheet" href="/css/widgets/corner-tag.css">
+<link rel="stylesheet" href="/css/widgets/downloads.css">
+<link rel="stylesheet" href="/css/widgets/page-number.css">
+<link rel="stylesheet" href="/css/widgets/slideshow.css">
+
+</head>
+<body>
+  <div class="desk">
+    <div class="notebook" id="notebook" role="region" aria-label="llote docs notebook">
+      <div class="spiral" aria-hidden="true"></div>
+      <main id="app"><h1>Search</h1>
+
+
+<span class="corner-tag-widget" data-widget="corner-tag">Search</span>
+
+<p><code>ask</code> finds notes by meaning, not exact wording — it never generates text; it only ever returns lines you already wrote, verbatim. As your file grows, <code>ask</code> will return more alternate results (max 10).</p>
+<p>Each note is embedded (turned into a vector) by a small local model. Your question gets embedded the same way, and llote ranks every note by cosine similarity to it — closest meaning wins, not closest spelling.</p>
+<p>Everything runs locally once the model's on disk. <code>llote setup</code> downloads it ahead of time; otherwise the first <code>ask</code> or <code>browse</code> search does it for you, which needs internet access once.</p>
+<p>Embeddings are cached. Each note's embedding is stored in an index file in app data, keyed by a hash of its timestamp and text, which cuts down on <code>ask</code> times.</p>
+
+
+<span class="page-number-widget" data-widget="page-number">8</span>
+</main>
+
+      <nav class="notebook-controls" aria-label="Notebook pages">
+        <a id="nb-menu" class="notebook-nav-btn" href="/contents/" aria-label="Table of contents">&#9776;</a>
+        <a id="nb-prev" class="notebook-nav-btn" href="/" aria-label="Previous page">&#8592;</a>
+        <div id="nb-indicator" class="notebook-indicator" aria-live="polite"></div>
+        <a id="nb-next" class="notebook-nav-btn" href="/" aria-label="Next page">&#8594;</a>
+      </nav>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <span>llote &mdash; built with Canary.</span>
+  </footer>
+
+  <script type="module" src="/js/notebook.js"></script>
+  <script src="/js/widgets/downloads.js" defer></script>
+<script src="/js/widgets/slideshow.js" defer></script>
+
+</body>
+</html>

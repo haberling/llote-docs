@@ -34,7 +34,8 @@
     // swap the active line below for the commented one to skip re-JITing
     // curtain.cs on every page build:
     // "curtain": { "command": "tools/bin/curtain.exe", "source": "tools/curtain.cs" },
-    "curtain": "dotnet run tools/curtain.cs"
+    "curtain": "dotnet run tools/curtain.cs",
+    "page-number": "dotnet run tools/page-number.cs"
   },
   "initialized": true
 }

@@ -12,7 +12,9 @@
   <link rel="stylesheet" href="/css/framework.css">
   <link rel="stylesheet" href="/css/theme.css">
   <link rel="stylesheet" href="/css/widgets/code.css">
+<link rel="stylesheet" href="/css/widgets/corner-tag.css">
 <link rel="stylesheet" href="/css/widgets/downloads.css">
+<link rel="stylesheet" href="/css/widgets/page-number.css">
 <link rel="stylesheet" href="/css/widgets/slideshow.css">
 
 </head>
@@ -21,8 +23,15 @@
     <div class="notebook" id="notebook" role="region" aria-label="llote docs notebook">
       <div class="spiral" aria-hidden="true"></div>
       <main id="app"><h1>Commands</h1>
-<ul><li><code>llote "text"</code> — add a note to the default file</li><li><code>llote</code> — list notes from the default file</li><li><code>llote &lt;file.llote&gt;</code> — list notes from that file</li><li><code>llote &lt;file.llote&gt; "text"</code> — add a note to that file</li><li><code>llote new</code> — create <code>./log.llote</code></li><li><code>llote setup</code> — download the embedding model ahead of time</li><li><code>llote pop [file]</code> — remove the last note</li><li><code>llote ask "question"</code> — semantic search over your notes</li><li><code>llote browse [file]</code> — a pageable TUI note browser</li></ul>
-<p>A bare argument is a file path if it ends in <code>.llote</code>, otherwise it's note text or a question — <code>new</code> and <code>ask</code> are the only reserved leading words.</p></main>
+
+
+<span class="corner-tag-widget" data-widget="corner-tag">Commands</span>
+
+<ul><li><code>llote</code> — list notes from the default file</li><li><code>llote &lt;file.llote&gt;</code> — list notes from that file</li><li><code>llote "text"</code> — add a note to the default file</li><li><code>llote &lt;file.llote&gt; "text"</code> — add a note to that file</li><li><code>llote new</code> — create <code>./log.llote</code></li><li><code>llote new &lt;file.llote&gt;</code> — create that file</li><li><code>llote setup</code> — download the embedding model ahead of time</li><li><code>llote pop</code> — remove the last note from the default file</li><li><code>llote pop &lt;file.llote&gt;</code> — remove the last note from that file</li><li><code>llote ask "question"</code> — semantic search over your notes</li><li><code>llote browse</code> — pageable TUI over the default file</li><li><code>llote browse &lt;file.llote&gt;</code> — same, over that file</li><li><code>llote help</code> — print the command structure</li></ul>
+
+
+<span class="page-number-widget" data-widget="page-number">5</span>
+</main>
 
       <nav class="notebook-controls" aria-label="Notebook pages">
         <a id="nb-menu" class="notebook-nav-btn" href="/contents/" aria-label="Table of contents">&#9776;</a>

@@ -12,7 +12,9 @@
   <link rel="stylesheet" href="/css/framework.css">
   <link rel="stylesheet" href="/css/theme.css">
   <link rel="stylesheet" href="/css/widgets/code.css">
+<link rel="stylesheet" href="/css/widgets/corner-tag.css">
 <link rel="stylesheet" href="/css/widgets/downloads.css">
+<link rel="stylesheet" href="/css/widgets/page-number.css">
 <link rel="stylesheet" href="/css/widgets/slideshow.css">
 
 </head>
@@ -21,6 +23,10 @@
     <div class="notebook" id="notebook" role="region" aria-label="llote docs notebook">
       <div class="spiral" aria-hidden="true"></div>
       <main id="app"><h1>File Format</h1>
+
+
+<span class="corner-tag-widget" data-widget="corner-tag">File Format</span>
+
 <p>Plain text, append-only, human-editable.</p>
 
 
@@ -32,7 +38,12 @@
 </code></pre>
 </div>
 
-<p>Line one is a header llote uses to key its own search cache in app data — never a sidecar file next to your notes. Every other line is a timestamp and your text, tab-separated. Hand-edit it, back it up, put it in git — it's just text.</p></main>
+<p>Line one is a header llote uses to key its own search cache in app data — never a sidecar file next to your notes. Every other line is a timestamp and your text, tab-separated. As plain text, it plays nicely with Git and AI assistants.</p>
+<p>Be careful editing a <code>.llote</code> file by hand. Damaging the <code>llote-id</code> can make the file unopenable (deleting the ID line outright will fix this). Lines without a properly formatted date may be harder for llote to find during an <code>ask</code>.</p>
+
+
+<span class="page-number-widget" data-widget="page-number">12</span>
+</main>
 
       <nav class="notebook-controls" aria-label="Notebook pages">
         <a id="nb-menu" class="notebook-nav-btn" href="/contents/" aria-label="Table of contents">&#9776;</a>

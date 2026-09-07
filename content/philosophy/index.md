@@ -1,14 +1,15 @@
 # Philosophy & FAQ
 
+```corner-tag
+text: "Philosophy & FAQ"
+```
+
 **Does llote use AI to write anything?**
-No. `ask` only ever returns a line you already wrote, verbatim. It never
-generates text.
+No. `ask` only ever returns a line you already wrote, verbatim. It can't generate text. No hallucinated notes.
 
 **Does anything leave my machine?**
-Only a one-time download of the local search model, the first time you run
-`ask` or `setup`. Your notes never do.
+The search model is downloaded locally the first time you run
+`ask` or `setup`. Your notes are never sent anywhere during writing or searching. Try turning your Wi-Fi off; the program runs all the same.
 
 **Why "llote"?**
-llm + note — search by meaning, not exact wording.
-
-*— fin —*
+There are only two hard problems in software engineering: concurrency and naming things. Its name needed to be short and unique. I just smashed LLM and note together to denote its AI search feature alongside the note-taking core.

@@ -1,0 +1,24 @@
+/*
+ * Styling for the "corner-tag" widget (corner-tag.html) -- uses the same
+ * --text-dim token framework.css defines on :root, same as every other
+ * built-in widget's CSS -- a site's own theme.css still wins on anything
+ * it overrides directly.
+ *
+ * Positioned absolute against its nearest positioned ancestor, whatever
+ * page-shell wraps a route's rendered content (e.g. this site's own
+ * .face-front, see css/theme.css) -- NOT its immediate parent, which is
+ * ordinary flowed markup and rarely positioned itself. That's deliberate:
+ * it's what pins this to the actual page's corner regardless of where in
+ * the markdown source the fence block is written.
+ */
+
+.corner-tag-widget {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}

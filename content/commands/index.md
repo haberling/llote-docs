@@ -1,14 +1,20 @@
 # Commands
 
-- `llote "text"` — add a note to the default file
+```corner-tag
+text: "Commands"
+```
+
 - `llote` — list notes from the default file
 - `llote <file.llote>` — list notes from that file
+- `llote "text"` — add a note to the default file
 - `llote <file.llote> "text"` — add a note to that file
 - `llote new` — create `./log.llote`
+- `llote new <file.llote>` — create that file
 - `llote setup` — download the embedding model ahead of time
-- `llote pop [file]` — remove the last note
+- `llote pop` — remove the last note from the default file
+- `llote pop <file.llote>` — remove the last note from that file
 - `llote ask "question"` — semantic search over your notes
-- `llote browse [file]` — a pageable TUI note browser
+- `llote browse` — pageable TUI over the default file
+- `llote browse <file.llote>` — same, over that file
+- `llote help` — print the command structure
 
-A bare argument is a file path if it ends in `.llote`, otherwise it's note
-text or a question — `new` and `ask` are the only reserved leading words.

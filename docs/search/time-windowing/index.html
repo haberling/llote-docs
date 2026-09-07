@@ -1,0 +1,56 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Time Windowing — llote docs</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&display=swap">
+  <link rel="stylesheet" href="/css/framework.css">
+  <link rel="stylesheet" href="/css/theme.css">
+  <link rel="stylesheet" href="/css/widgets/code.css">
+<link rel="stylesheet" href="/css/widgets/corner-tag.css">
+<link rel="stylesheet" href="/css/widgets/downloads.css">
+<link rel="stylesheet" href="/css/widgets/page-number.css">
+<link rel="stylesheet" href="/css/widgets/slideshow.css">
+
+</head>
+<body>
+  <div class="desk">
+    <div class="notebook" id="notebook" role="region" aria-label="llote docs notebook">
+      <div class="spiral" aria-hidden="true"></div>
+      <main id="app"><h1>Time Windowing</h1>
+
+
+<span class="corner-tag-widget" data-widget="corner-tag">Search - Time Windowing</span>
+
+<p><code>ask</code> recognizes a small, fixed set of time expressions and uses them to narrow which notes are even considered, before any meaning-based matching happens. <strong>The expression must be at the end of the question</strong> — <code>ask "what did I write about the dentist last week"</code> works; putting <code>last week</code> first does not.</p>
+<p>Recognized phrases: <code>today</code>, <code>yesterday</code>, <code>this week</code>, <code>last week</code>, <code>this month</code>, <code>last month</code>, <code>last # [days/weeks/months/years]</code> — plus an explicit date, <code>2026-09-01</code> or the short form <code>26-09-01</code>. Prefix any of those with <code>before</code>: <code>before last 8 days</code> searches everything older than 8 days ago. The time phrase is stripped before the rest gets embedded, so the dentist example searches for "what did I write about the dentist", scoped to last week's notes only.</p>
+<p>If the whole question is just a time phrase, llote skips meaning-based ranking and returns matching notes by recency, newest first.</p>
+
+
+<span class="page-number-widget" data-widget="page-number">9</span>
+</main>
+
+      <nav class="notebook-controls" aria-label="Notebook pages">
+        <a id="nb-menu" class="notebook-nav-btn" href="/contents/" aria-label="Table of contents">&#9776;</a>
+        <a id="nb-prev" class="notebook-nav-btn" href="/" aria-label="Previous page">&#8592;</a>
+        <div id="nb-indicator" class="notebook-indicator" aria-live="polite"></div>
+        <a id="nb-next" class="notebook-nav-btn" href="/" aria-label="Next page">&#8594;</a>
+      </nav>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <span>llote &mdash; built with Canary.</span>
+  </footer>
+
+  <script type="module" src="/js/notebook.js"></script>
+  <script src="/js/widgets/downloads.js" defer></script>
+<script src="/js/widgets/slideshow.js" defer></script>
+
+</body>
+</html>

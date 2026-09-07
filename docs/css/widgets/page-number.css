@@ -1,0 +1,20 @@
+/*
+ * Styling for the "page-number" widget (page-number.html) -- uses the same
+ * --text-dim token framework.css defines on :root, same as every other
+ * built-in widget's CSS -- a site's own theme.css still wins on anything
+ * it overrides directly.
+ *
+ * Positioned absolute against its nearest positioned ancestor, same
+ * approach as corner-tag.css (see that file's comment for why) -- pinned
+ * to the bottom-right corner instead of the top-right.
+ */
+
+.page-number-widget {
+  position: absolute;
+  bottom: 1rem;
+  right: 1.25rem;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  color: var(--text-dim);
+}

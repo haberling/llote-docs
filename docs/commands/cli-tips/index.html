@@ -1,0 +1,56 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CLI Tips — llote docs</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&display=swap">
+  <link rel="stylesheet" href="/css/framework.css">
+  <link rel="stylesheet" href="/css/theme.css">
+  <link rel="stylesheet" href="/css/widgets/code.css">
+<link rel="stylesheet" href="/css/widgets/corner-tag.css">
+<link rel="stylesheet" href="/css/widgets/downloads.css">
+<link rel="stylesheet" href="/css/widgets/page-number.css">
+<link rel="stylesheet" href="/css/widgets/slideshow.css">
+
+</head>
+<body>
+  <div class="desk">
+    <div class="notebook" id="notebook" role="region" aria-label="llote docs notebook">
+      <div class="spiral" aria-hidden="true"></div>
+      <main id="app"><h1>CLI Tips</h1>
+
+
+<span class="corner-tag-widget" data-widget="corner-tag">Commands - CLI Tips</span>
+
+<p><code>llote</code> with no arguments dumps the whole file. On a long one, pipe it: <code>llote | more</code>. <code>head</code> works too — llote treats a closed pipe as done, not an error. Same idea for a quick filter: <code>llote | findstr /i dentist</code>.</p>
+<p>A note with spaces has to be one argument. <code>llote bought milk</code> is unrecognized; <code>llote "bought milk"</code> is the note. Same for questions: <code>llote ask "what did I write about the dentist?"</code>.</p>
+<p><code>llote ask &lt;file.llote&gt; "question"</code> searches a named file the same way <code>llote &lt;file.llote&gt; "text"</code> writes to one. <code>llote</code> lists; <code>llote browse</code> is the TUI.</p>
+
+
+<span class="page-number-widget" data-widget="page-number">6</span>
+</main>
+
+      <nav class="notebook-controls" aria-label="Notebook pages">
+        <a id="nb-menu" class="notebook-nav-btn" href="/contents/" aria-label="Table of contents">&#9776;</a>
+        <a id="nb-prev" class="notebook-nav-btn" href="/" aria-label="Previous page">&#8592;</a>
+        <div id="nb-indicator" class="notebook-indicator" aria-live="polite"></div>
+        <a id="nb-next" class="notebook-nav-btn" href="/" aria-label="Next page">&#8594;</a>
+      </nav>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <span>llote &mdash; built with Canary.</span>
+  </footer>
+
+  <script type="module" src="/js/notebook.js"></script>
+  <script src="/js/widgets/downloads.js" defer></script>
+<script src="/js/widgets/slideshow.js" defer></script>
+
+</body>
+</html>
