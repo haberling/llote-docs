@@ -552,11 +552,33 @@ body {
    Responsive
    --------------------------------------------------------------------- */
 
-@media (max-width: 480px) {
-  .notebook {
-    width: 96vw;
+/* Phones: the notebook's width is already pinned near 97vw by the base
+   rule above, so the fixed 3/4 aspect-ratio leaves a lot of the tall
+   viewport unused above/below it -- content that would otherwise fit on
+   one page ends up scrolling inside .read-window instead. Stretching the
+   ratio taller (3/5) lets the page grow into that dead space using the
+   width the phone already has, instead of widening it. Still clamped by
+   a dvh-derived candidate (same 90dvh height budget the base rule already
+   trusts) so a short/landscape phone can't push the notebook past the
+   viewport. */
+@media (max-width: 640px) {
+  /* The footer is a fixed row the mobile-portrait notebook can't reclaim
+     just by growing (see .site-footer in shell.html: a sibling of .desk,
+     not inside it) -- dropping it here frees that strip for the notebook,
+     so the height budget below goes up from the base rule's 90dvh to
+     account for it. */
+  .site-footer {
+    display: none;
   }
 
+  .notebook {
+    width: min(97vw, calc(96vh * 0.6));
+    width: min(97vw, calc(96dvh * 0.6));
+    aspect-ratio: 3 / 5;
+  }
+}
+
+@media (max-width: 480px) {
   .page-scroll,
   .read-window {
     padding: 2.75rem 1.25rem 1.5rem 2.25rem;
