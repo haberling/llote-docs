@@ -4,8 +4,6 @@
 text: "Commands"
 ```
 
-`[<file.llote>]` is optional — omit it to use the default file.
-
 ```table
 a: Command
 c: What it does
@@ -36,4 +34,6 @@ rows:
   - a: llote help
     c: print the command structure
 ```
+
+`[<file.llote>]` is optional — omit it to use the default file.
 

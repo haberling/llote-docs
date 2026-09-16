@@ -47,6 +47,14 @@ The default model is BGE Small EN v1.5. Settings can switch you to a quantized (
 
 Embeddings are cached. Each note's embedding is stored in an index file in app data, keyed by a hash of its timestamp and text, which cuts down on `ask` times. Switching models, or clearing the index from Settings, starts that cache over.
 
+## Writing Searchable Notes
+
+Short notes with one idea are easier to find. `bought milk` is a single thought; a short question like "milk" or "what groceries do I need?" can land on it.
+
+A long note that mixes several ideas — groceries, the dentist, and a reminder to call the bank — is one embedding covering all of that. A short question about the dentist has to compete with the rest of the line. To find that note, the search text needs to be longer and richer, closer to what you actually wrote.
+
+When you can, split: one note per idea. When you can't, search with more of the note, not less.
+
 ## Time Windowing
 
 `ask` recognizes a small, fixed set of time expressions and uses them to narrow which notes are even considered, before any meaning-based matching happens. **The expression must be at the end of the question** — `ask "what did I write about the dentist last week"` works; putting `last week` first does not.
@@ -67,8 +75,6 @@ A question that's only a time phrase — `ask "yesterday"` — gets you a quick 
 
 ## Commands
 
-`[<file.llote>]` is optional — omit it to use the default file.
-
 | Command | What it does |
 | --- | --- |
 | llote [<file.llote>] | list notes |
@@ -83,6 +89,8 @@ A question that's only a time phrase — `ask "yesterday"` — gets you a quick 
 | llote settings | same, opened straight to the Settings tab |
 | llote docs | print this site's URL |
 | llote help | print the command structure |
+
+`[<file.llote>]` is optional — omit it to use the default file.
 
 ## CLI Tips
 
@@ -113,6 +121,20 @@ custom default file only ever replaces the global fallback; it doesn't
 override a local file that's already there.
 
 `Ctrl+F2` opens settings in the TUI (`llote settings` from the command line). From there you can set a custom default file and/or set "always use global notes" to skip over a local `.\log.llote`.
+
+## Settings
+
+`Ctrl+F2` in browse, or `llote settings` from the command line, opens the Settings tab. Enter toggles or runs the highlighted row; Esc returns to Add.
+
+| Section | What it does |
+| --- | --- |
+| Splash | show the intro animation when browse starts |
+| Default File | always use global notes; pick or enable a custom default file |
+| Embedding | switch the local search model; delete unused downloaded models |
+| Search Index | clear the cache, or clean index data left over from deleted files |
+| Documentation | open this site |
+
+Changing models rebuilds the search index. `llote setup` downloads the current choice ahead of time. How the default file is chosen is on [Default File](/default-file/).
 
 ## File Format
 

@@ -13,7 +13,7 @@
   color-scheme: light;
   --ink: #2e0f05;
   --accent: #ff6600;
-  --paper: #fffdf6;
+  --paper: #ffffff;
   --paper-line: rgba(70, 110, 190, 0.22);
   --paper-margin: rgba(196, 62, 48, 0.35);
   --wire: #9a9186;
@@ -194,14 +194,9 @@ body {
   backface-visibility: hidden;
   border-radius: 6px;
   background-color: var(--paper);
-  background-image:
-    repeating-linear-gradient(
-      to bottom,
-      transparent 0,
-      transparent 27px,
-      var(--paper-line) 28px
-    ),
-    linear-gradient(to right, transparent 0 42px, var(--paper-margin) 42px 43px, transparent 43px);
+  background-image: url("/img/paper.svg");
+  background-size: 180px 180px;
+  background-repeat: repeat;
 }
 
 .page.current:not(.turning) .face-front {
@@ -314,9 +309,9 @@ body {
 }
 
 /* Cover is a solid-color board, front and back -- like a real notebook's
-   cover vs. its plain-paper interior pages. No ruled-line/margin texture
-   here, just the brand color the owl mark's own background already
-   matches, so the mark reads as debossed straight into the cover. */
+   cover vs. its plain-paper interior pages. Just the brand color the owl
+   mark's own background already matches, so the mark reads as debossed
+   straight into the cover. */
 .notebook > .page:first-of-type .face-front,
 .notebook > .page:first-of-type .face-back {
   background-color: var(--accent);

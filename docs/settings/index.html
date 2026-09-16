@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Getting the Most Out of Search — llote docs</title>
+  <title>Settings — llote docs</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <meta name="theme-color" content="#ff6600">
   <link rel="manifest" href="/manifest.webmanifest">
@@ -25,18 +25,64 @@
   <div class="desk">
     <div class="notebook" id="notebook" role="region" aria-label="llote docs notebook">
       <div class="spiral" aria-hidden="true"></div>
-      <main id="app"><h1>Getting the Most Out of Search</h1>
+      <main id="app"><h1>Settings</h1>
 
 
-<span class="corner-tag-widget" data-widget="corner-tag">Search - Getting the Most Out of Search</span>
+<span class="corner-tag-widget" data-widget="corner-tag">Settings</span>
 
-<p>Write notes the way you'd actually search for them. Search is meaning-based, so wording doesn't have to match exactly — but the words you use still shape the embedding. "milk" and "bought milk at the store" won't rank the same against a question like "what groceries do I need?"</p>
-<p>Combine a time phrase with an actual question to cut a big file down fast: <code>ask "dentist last week"</code> scopes the search before ranking even starts, instead of paging through everything.</p>
-<p>A question that's only a time phrase — <code>ask "yesterday"</code> — gets you a quick recency-ordered recap instead of a ranked search, since there's no question text left to rank by.</p>
-<p><code>ask</code> and browse's Find tab cap at 10 even in a large file. If you need more than that, use Rank (Ctrl+R) in browse, or narrow with a time phrase first rather than expecting one <code>ask</code> to surface everything.</p>
+<p><code>Ctrl+F2</code> in browse, or <code>llote settings</code> from the command line, opens the Settings tab. Enter toggles or runs the highlighted row; Esc returns to Add.</p>
 
 
-<span class="page-number-widget" data-widget="page-number">9</span>
+<table class="table-widget" data-widget="table">
+  <thead>
+    <tr>
+      <th>Section</th>
+      
+      <th>What it does</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    
+    
+    <tr>
+      <td>Splash</td>
+      
+      <td>show the intro animation when browse starts</td>
+    </tr>
+    
+    <tr>
+      <td>Default File</td>
+      
+      <td>always use global notes; pick or enable a custom default file</td>
+    </tr>
+    
+    <tr>
+      <td>Embedding</td>
+      
+      <td>switch the local search model; delete unused downloaded models</td>
+    </tr>
+    
+    <tr>
+      <td>Search Index</td>
+      
+      <td>clear the cache, or clean index data left over from deleted files</td>
+    </tr>
+    
+    <tr>
+      <td>Documentation</td>
+      
+      <td>open this site</td>
+    </tr>
+    
+    
+  </tbody>
+</table>
+
+<p>Changing models rebuilds the search index. <code>llote setup</code> downloads the current choice ahead of time. How the default file is chosen is on <a href="/default-file/">Default File</a>.</p>
+
+
+<span class="page-number-widget" data-widget="page-number">14</span>
 </main>
 
       <nav class="notebook-controls" aria-label="Notebook pages">

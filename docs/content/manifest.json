@@ -30,6 +30,11 @@
       "path": "search",
       "children": [
         {
+          "title": "Writing Searchable Notes",
+          "path": "search/writing-searchable-notes",
+          "children": null
+        },
+        {
           "title": "Time Windowing",
           "path": "search/time-windowing",
           "children": null
@@ -60,6 +65,11 @@
     {
       "title": "Default File",
       "path": "default-file",
+      "children": null
+    },
+    {
+      "title": "Settings",
+      "path": "settings",
       "children": null
     },
     {
