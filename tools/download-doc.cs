@@ -13,7 +13,8 @@
 // Reads source index.md files from disk, not toolchain stdout, so
 // injected page-number / toc-list fences never appear. Widget fences
 // are deleted except `code`, which is unspun into a bare markdown
-// fence. Remaining ATX headings are demoted one level so the dump's
+// fence, and `table`, which is unspun into a markdown table.
+// Remaining ATX headings are demoted one level so the dump's
 // own H1 stays unique.
 //
 // Version comes from the cover-plate fence in content/index.md.
@@ -149,6 +150,10 @@ static string TransformPage(string markdown)
             {
                 output.AddRange(CodeWidgetToFence(body));
             }
+            else if (name == "table")
+            {
+                output.AddRange(TableWidgetToMarkdown(body));
+            }
             continue;
         }
 
@@ -174,6 +179,82 @@ static IEnumerable<string> CodeWidgetToFence(List<string> yaml)
     yield return "```";
     foreach (var t in texts) yield return t;
     yield return "```";
+}
+
+static IEnumerable<string> TableWidgetToMarkdown(List<string> yaml)
+{
+    string ha = "", hb = "", hc = "";
+    var rows = new List<(string A, string B, string C)>();
+    var inRows = false;
+    string a = "", b = "", c = "";
+    var inRow = false;
+    foreach (var raw in yaml)
+    {
+        var line = raw.TrimEnd();
+        if (!inRows)
+        {
+            if (Regex.IsMatch(line, @"^\s*rows:\s*$"))
+            {
+                inRows = true;
+                continue;
+            }
+            var header = Regex.Match(line, @"^\s*([abc]):\s*(.*)$");
+            if (header.Success)
+            {
+                var val = Unquote(header.Groups[2].Value.Trim());
+                switch (header.Groups[1].Value)
+                {
+                    case "a": ha = val; break;
+                    case "b": hb = val; break;
+                    case "c": hc = val; break;
+                }
+            }
+            continue;
+        }
+        var m = Regex.Match(line, @"^\s*- a:\s*(.*)$");
+        if (m.Success)
+        {
+            if (inRow) rows.Add((a, b, c));
+            a = Unquote(m.Groups[1].Value.Trim());
+            b = "";
+            c = "";
+            inRow = true;
+            continue;
+        }
+        m = Regex.Match(line, @"^\s*b:\s*(.*)$");
+        if (m.Success)
+        {
+            b = Unquote(m.Groups[1].Value.Trim());
+            continue;
+        }
+        m = Regex.Match(line, @"^\s*c:\s*(.*)$");
+        if (m.Success)
+        {
+            c = Unquote(m.Groups[1].Value.Trim());
+        }
+    }
+    if (inRow) rows.Add((a, b, c));
+    if (rows.Count == 0) yield break;
+
+    var hasB = hb.Length > 0 || rows.Exists(r => r.B.Length > 0);
+    if (hasB)
+    {
+        yield return $"| {ha} | {hb} | {hc} |";
+        yield return "| --- | --- | --- |";
+        foreach (var row in rows)
+        {
+            yield return $"| {row.A} | {row.B} | {row.C} |";
+        }
+    }
+    else
+    {
+        yield return $"| {ha} | {hc} |";
+        yield return "| --- | --- |";
+        foreach (var row in rows)
+        {
+            yield return $"| {row.A} | {row.C} |";
+        }
+    }
 }
 
 static string DemoteHeading(string line)
@@ -246,17 +327,23 @@ static void UpsertCurrentDump(string outDir, JsonArray versions, string dumpName
     var updated = DateTime.UtcNow.ToString("yyyy-MM-dd");
     if (entry is null)
     {
-        versions.Insert(0, new JsonObject
-        {
-            ["file"] = dumpName,
-            ["hash"] = hash,
-            ["updated"] = updated,
-        });
+        // Cast to JsonNode so this hits JsonArray.Insert(int, JsonNode),
+        // not the generic Add/Insert<T> that `dotnet run` file-based apps
+        // warn about (IL2026/IL3050) — those warnings go to stdout and
+        // would leak into the page HTML.
+        versions.Insert(0, (JsonNode)DumpEntry(dumpName, hash, updated));
         return;
     }
     entry["hash"] = hash;
     entry["updated"] = updated;
 }
+
+static JsonObject DumpEntry(string file, string hash, string updated) => new()
+{
+    ["file"] = file,
+    ["hash"] = hash,
+    ["updated"] = updated,
+};
 
 static void EnsureEntriesForExistingDumps(string outDir, JsonArray versions)
 {
@@ -266,12 +353,7 @@ static void EnsureEntriesForExistingDumps(string outDir, JsonArray versions)
         if (FindVersion(versions, name) is not null) continue;
         var hash = Sha256Hex(File.ReadAllText(path).Replace("\r\n", "\n"));
         var updated = File.GetLastWriteTimeUtc(path).ToString("yyyy-MM-dd");
-        versions.Add(new JsonObject
-        {
-            ["file"] = name,
-            ["hash"] = hash,
-            ["updated"] = updated,
-        });
+        versions.Add((JsonNode)DumpEntry(name, hash, updated));
     }
 }
 

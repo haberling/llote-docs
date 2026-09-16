@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="/css/widgets/downloads.css">
 <link rel="stylesheet" href="/css/widgets/page-number.css">
 <link rel="stylesheet" href="/css/widgets/slideshow.css">
+<link rel="stylesheet" href="/css/widgets/table.css">
 
 </head>
 <body>
@@ -29,10 +30,88 @@
 
 <span class="corner-tag-widget" data-widget="corner-tag">Commands</span>
 
-<ul><li><code>llote</code> — list notes from the default file</li><li><code>llote &lt;file.llote&gt;</code> — list notes from that file</li><li><code>llote "text"</code> — add a note to the default file</li><li><code>llote &lt;file.llote&gt; "text"</code> — add a note to that file</li><li><code>llote new</code> — create <code>./log.llote</code></li><li><code>llote new &lt;file.llote&gt;</code> — create that file</li><li><code>llote setup</code> — download the embedding model ahead of time</li><li><code>llote pop</code> — remove the last note from the default file</li><li><code>llote pop &lt;file.llote&gt;</code> — remove the last note from that file</li><li><code>llote ask "question"</code> — semantic search over your notes</li><li><code>llote browse</code> — pageable TUI over the default file</li><li><code>llote browse &lt;file.llote&gt;</code> — same, over that file</li><li><code>llote docs</code> — print this site's URL</li><li><code>llote help</code> — print the command structure</li></ul>
+<p><code>[&lt;file.llote&gt;]</code> is optional — omit it to use the default file.</p>
 
 
-<span class="page-number-widget" data-widget="page-number">5</span>
+<table class="table-widget" data-widget="table">
+  <thead>
+    <tr>
+      <th>Command</th>
+      
+      <th>What it does</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    
+    <tr>
+      <td><code>llote [&lt;file.llote&gt;]</code></td>
+      <td>list notes</td>
+    </tr>
+    
+    <tr>
+      <td><code>llote [&lt;file.llote&gt;] &quot;text&quot;</code></td>
+      <td>add a note</td>
+    </tr>
+    
+    <tr>
+      <td><code>llote [&lt;file.llote&gt;] -- text</code></td>
+      <td>add a note, no quoting needed (joins the rest of the line)</td>
+    </tr>
+    
+    <tr>
+      <td><code>llote new [&lt;file.llote&gt;]</code></td>
+      <td>create ./log.llote, or a named file</td>
+    </tr>
+    
+    <tr>
+      <td><code>llote setup</code></td>
+      <td>download the embedding model ahead of time</td>
+    </tr>
+    
+    <tr>
+      <td><code>llote pop [&lt;file.llote&gt;]</code></td>
+      <td>remove the last note</td>
+    </tr>
+    
+    <tr>
+      <td><code>llote ask [&lt;file.llote&gt;] &quot;question&quot;</code></td>
+      <td>semantic search</td>
+    </tr>
+    
+    <tr>
+      <td><code>llote ask [&lt;file.llote&gt;] -- question</code></td>
+      <td>same, no quoting needed</td>
+    </tr>
+    
+    <tr>
+      <td><code>llote browse [&lt;file.llote&gt;]</code></td>
+      <td>pageable TUI</td>
+    </tr>
+    
+    <tr>
+      <td><code>llote settings</code></td>
+      <td>same, opened straight to the Settings tab</td>
+    </tr>
+    
+    <tr>
+      <td><code>llote docs</code></td>
+      <td>print this site's URL</td>
+    </tr>
+    
+    <tr>
+      <td><code>llote help</code></td>
+      <td>print the command structure</td>
+    </tr>
+    
+    
+    
+  </tbody>
+</table>
+
+
+
+<span class="page-number-widget" data-widget="page-number">9</span>
 </main>
 
       <nav class="notebook-controls" aria-label="Notebook pages">

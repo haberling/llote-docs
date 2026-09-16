@@ -10,4 +10,4 @@ Combine a time phrase with an actual question to cut a big file down fast: `ask 
 
 A question that's only a time phrase — `ask "yesterday"` — gets you a quick recency-ordered recap instead of a ranked search, since there's no question text left to rank by.
 
-Results cap at 10 even in a large file. If you need more than that, narrow with a time phrase first rather than expecting one `ask` to surface everything.
+`ask` and browse's Find tab cap at 10 even in a large file. If you need more than that, use Rank (Ctrl+R) in browse, or narrow with a time phrase first rather than expecting one `ask` to surface everything.

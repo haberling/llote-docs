@@ -15,6 +15,6 @@ items:
     url: "https://consoland.net/utilities/llote"
 ```
 
-* The Store download gives you less fine-grained control over the uninstall process. *
+Once installed, you can run llote from the command line (`llote`) or from the Start menu. A Start menu launch or a double-clicked `.llote` file opens in Windows Terminal when it's installed.
 
-Once installed, you can run llote from the command line (`llote`) or from the Start menu.
+Your notes live in Documents, not with the app. Uninstalling leaves them in place. The Store download still removes the cached model, search index, and settings with the app; the installer from consoland.net asks first.

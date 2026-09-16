@@ -1,0 +1,51 @@
+/*
+ * Styling for the table widget (see table.html). Uses this site's paper
+ * tokens (--ink, --accent, --paper-line) rather than framework.css's
+ * dark-theme --border/--bg-elevated, same reason theme.css restyles
+ * the built-in code and downloads widgets.
+ */
+
+.table-widget {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 1rem;
+  font-size: 0.92em;
+  line-height: 1.35;
+}
+
+.table-widget th,
+.table-widget td {
+  padding: 0.28rem 0.45rem 0.28rem 0;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--paper-line);
+}
+
+.table-widget th {
+  font-weight: 700;
+  color: var(--ink);
+  border-bottom-color: color-mix(in srgb, var(--ink) 28%, transparent);
+}
+
+.table-widget td:first-child,
+.table-widget th:first-child {
+  padding-left: 0;
+}
+
+/* Middle column of a 3-col table (shortcuts) stays on one line.
+   2-col tables skip this: their second cell is the last cell. */
+.table-widget th:nth-child(2):nth-last-child(2),
+.table-widget td:nth-child(2):nth-last-child(2) {
+  white-space: nowrap;
+  padding-right: 0.7rem;
+}
+
+.table-widget th:first-child:nth-last-child(3),
+.table-widget td:first-child:nth-last-child(3) {
+  white-space: nowrap;
+}
+
+.table-widget tbody tr:last-child th,
+.table-widget tbody tr:last-child td {
+  border-bottom: none;
+}

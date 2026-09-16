@@ -1,0 +1,49 @@
+<!--
+  Standard widget contract (see widgets/downloads.html): a plain
+  Mustache-syntax HTML template, filled from the fence block's YAML body.
+  Canary's markdown renderer has no table syntax (see Canary's FAQ), so
+  this is the way a page gets a real HTML table. Three named columns
+  (a / b / c); omit b for a two-column table. Set code: true to wrap
+  column a in a code element (commands). Column b, when present, is
+  always wrapped (shortcuts). NOTE: this comment deliberately never
+  writes the actual double-brace tag syntax.
+-->
+<!--clipboard
+```table
+a: Tab
+b: Key
+c: What it does
+rows:
+  - a: Add
+    b: Ctrl+A
+    c: type a note and press Enter
+```
+-->
+<table class="table-widget" data-widget="table">
+  <thead>
+    <tr>
+      <th>{{a}}</th>
+      {{#b}}<th>{{b}}</th>{{/b}}
+      <th>{{c}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#code}}
+    {{#rows}}
+    <tr>
+      <td><code>{{a}}</code></td>
+      <td>{{c}}</td>
+    </tr>
+    {{/rows}}
+    {{/code}}
+    {{^code}}
+    {{#rows}}
+    <tr>
+      <td>{{a}}</td>
+      {{#b}}<td><code>{{b}}</code></td>{{/b}}
+      <td>{{c}}</td>
+    </tr>
+    {{/rows}}
+    {{/code}}
+  </tbody>
+</table>

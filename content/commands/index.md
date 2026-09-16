@@ -4,18 +4,36 @@
 text: "Commands"
 ```
 
-- `llote` — list notes from the default file
-- `llote <file.llote>` — list notes from that file
-- `llote "text"` — add a note to the default file
-- `llote <file.llote> "text"` — add a note to that file
-- `llote new` — create `./log.llote`
-- `llote new <file.llote>` — create that file
-- `llote setup` — download the embedding model ahead of time
-- `llote pop` — remove the last note from the default file
-- `llote pop <file.llote>` — remove the last note from that file
-- `llote ask "question"` — semantic search over your notes
-- `llote browse` — pageable TUI over the default file
-- `llote browse <file.llote>` — same, over that file
-- `llote docs` — print this site's URL
-- `llote help` — print the command structure
+`[<file.llote>]` is optional — omit it to use the default file.
+
+```table
+a: Command
+c: What it does
+code: true
+rows:
+  - a: "llote [<file.llote>]"
+    c: list notes
+  - a: 'llote [<file.llote>] "text"'
+    c: add a note
+  - a: "llote [<file.llote>] -- text"
+    c: add a note, no quoting needed (joins the rest of the line)
+  - a: "llote new [<file.llote>]"
+    c: create ./log.llote, or a named file
+  - a: llote setup
+    c: download the embedding model ahead of time
+  - a: "llote pop [<file.llote>]"
+    c: remove the last note
+  - a: 'llote ask [<file.llote>] "question"'
+    c: semantic search
+  - a: "llote ask [<file.llote>] -- question"
+    c: same, no quoting needed
+  - a: "llote browse [<file.llote>]"
+    c: pageable TUI
+  - a: llote settings
+    c: same, opened straight to the Settings tab
+  - a: llote docs
+    c: print this site's URL
+  - a: llote help
+    c: print the command structure
+```
 

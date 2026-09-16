@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>llote.consoland.net/</loc></url>
+  <url><loc>llote.consoland.net/browse/</loc></url>
   <url><loc>llote.consoland.net/commands/</loc></url>
   <url><loc>llote.consoland.net/commands/cli-tips/</loc></url>
   <url><loc>llote.consoland.net/commands/footguns/</loc></url>

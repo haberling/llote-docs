@@ -274,7 +274,8 @@ body {
 }
 
 .page-content strong {
-  color: var(--accent);
+  color: var(--ink);
+  font-weight: 700;
 }
 
 .page-content img {

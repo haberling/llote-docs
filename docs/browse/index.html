@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>License — llote docs</title>
+  <title>Browse — llote docs</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <meta name="theme-color" content="#ff6600">
   <link rel="manifest" href="/manifest.webmanifest">
@@ -25,21 +25,76 @@
   <div class="desk">
     <div class="notebook" id="notebook" role="region" aria-label="llote docs notebook">
       <div class="spiral" aria-hidden="true"></div>
-      <main id="app"><h1>License</h1>
+      <main id="app"><h1>Browse</h1>
 
 
-<span class="corner-tag-widget" data-widget="corner-tag">License</span>
+<span class="corner-tag-widget" data-widget="corner-tag">Browse</span>
 
-<p>Copyright 2026 Habersoft. All rights reserved. Habersoft is a trade name registered in North Dakota.</p>
-<p>llote is free for use in any environment, including personal, academic, commercial, government, business, non-profit, and for-profit. "Free" means there is no cost or charge associated with the installation and use of llote.</p>
-<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software (the "Software"), to use the Software.</p>
-<p>You may not modify, adapt, rent, lease, loan, sell, redistribute, or create derivative works based upon the Software or any part thereof.</p>
-<p>This license does not apply to the contents of <code>.llote</code> files.</p>
-<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
-<p>The embedding models (BGE English v1.5, several sizes) are downloaded separately under BAAI's MIT license. Arvo, used on this site, is under the SIL Open Font License.</p>
+<p><code>llote browse</code> is a pageable TUI over the default file (<code>llote browse notes.llote</code> for a named one). Start menu and a double-clicked <code>.llote</code> file land here too.</p>
 
 
-<span class="page-number-widget" data-widget="page-number">16</span>
+<table class="table-widget" data-widget="table">
+  <thead>
+    <tr>
+      <th>Tab</th>
+      <th>Key</th>
+      <th>What it does</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    
+    
+    <tr>
+      <td>Add</td>
+      <td><code>Ctrl+A</code></td>
+      <td>type a note and press Enter</td>
+    </tr>
+    
+    <tr>
+      <td>Find</td>
+      <td><code>Ctrl+F</code></td>
+      <td>search by meaning; a handful of best matches, top one highlighted</td>
+    </tr>
+    
+    <tr>
+      <td>Rank</td>
+      <td><code>Ctrl+R</code></td>
+      <td>same search, every candidate listed by relevance, nothing pre-selected</td>
+    </tr>
+    
+    <tr>
+      <td>New</td>
+      <td><code>Ctrl+N</code></td>
+      <td>create a new .llote file</td>
+    </tr>
+    
+    <tr>
+      <td>Load</td>
+      <td><code>Ctrl+L</code></td>
+      <td>open an existing file</td>
+    </tr>
+    
+    <tr>
+      <td>Settings</td>
+      <td><code>Ctrl+F2</code></td>
+      <td>splash, default file, embedding model, search index, docs</td>
+    </tr>
+    
+    <tr>
+      <td>Delete</td>
+      <td><code>Ctrl+D</code></td>
+      <td>remove the highlighted note, with a Yes/No confirm</td>
+    </tr>
+    
+    
+  </tbody>
+</table>
+
+<p><code>llote settings</code> opens browse already on the Settings tab. Esc leaves Settings, Load, or New and returns to Add; Esc from Add quits.</p>
+
+
+<span class="page-number-widget" data-widget="page-number">5</span>
 </main>
 
       <nav class="notebook-controls" aria-label="Notebook pages">

@@ -7,9 +7,9 @@ text: "Quick Start"
 ```code
 lang: text
 lines:
-  - text: 'llote "bought milk"'
+  - text: "llote -- bought milk"
   - text: "llote"
-  - text: 'llote ask "what did I write about the dentist?"'
+  - text: "llote ask -- what did I write about the dentist?"
   - text: "llote browse"
 ```
 

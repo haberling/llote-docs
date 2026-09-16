@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="/css/widgets/downloads.css">
 <link rel="stylesheet" href="/css/widgets/page-number.css">
 <link rel="stylesheet" href="/css/widgets/slideshow.css">
+<link rel="stylesheet" href="/css/widgets/table.css">
 
 </head>
 <body>
@@ -30,11 +31,11 @@
 <span class="corner-tag-widget" data-widget="corner-tag">Commands - CLI Tips</span>
 
 <p><code>llote</code> with no arguments dumps the whole file. On a long one, pipe it: <code>llote | more</code>. <code>head</code> works too — llote treats a closed pipe as done, not an error. Same idea for a quick filter: <code>llote | findstr /i dentist</code>.</p>
-<p>A note with spaces has to be one argument. <code>llote bought milk</code> is unrecognized; <code>llote "bought milk"</code> is the note. Same for questions: <code>llote ask "what did I write about the dentist?"</code>.</p>
-<p><code>llote ask &lt;file.llote&gt; "question"</code> searches a named file the same way <code>llote &lt;file.llote&gt; "text"</code> writes to one. <code>llote</code> lists; <code>llote browse</code> is the TUI.</p>
+<p><code>--</code> joins everything after it into one note or question, so you don't have to quote: <code>llote -- bought milk</code>, <code>llote ask -- what did I write about the dentist?</code>. Quotes still work (<code>llote "bought milk"</code>). Without either, <code>llote bought milk</code> is unrecognized.</p>
+<p><code>llote ask &lt;file.llote&gt; -- question</code> searches a named file the same way <code>llote &lt;file.llote&gt; -- text</code> writes to one. <code>llote</code> lists; <code>llote browse</code> is the TUI.</p>
 
 
-<span class="page-number-widget" data-widget="page-number">6</span>
+<span class="page-number-widget" data-widget="page-number">10</span>
 </main>
 
       <nav class="notebook-controls" aria-label="Notebook pages">

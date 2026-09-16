@@ -21,20 +21,9 @@
       "children": null
     },
     {
-      "title": "Commands",
-      "path": "commands",
-      "children": [
-        {
-          "title": "CLI Tips",
-          "path": "commands/cli-tips",
-          "children": null
-        },
-        {
-          "title": "Footguns",
-          "path": "commands/footguns",
-          "children": null
-        }
-      ]
+      "title": "Browse",
+      "path": "browse",
+      "children": null
     },
     {
       "title": "Search",
@@ -48,6 +37,22 @@
         {
           "title": "Getting the Most Out of Search",
           "path": "search/tips",
+          "children": null
+        }
+      ]
+    },
+    {
+      "title": "Commands",
+      "path": "commands",
+      "children": [
+        {
+          "title": "CLI Tips",
+          "path": "commands/cli-tips",
+          "children": null
+        },
+        {
+          "title": "Footguns",
+          "path": "commands/footguns",
           "children": null
         }
       ]

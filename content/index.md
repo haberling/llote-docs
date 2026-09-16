@@ -3,7 +3,7 @@
 # llote
 
 ```cover-plate
-version: "1.0.0.0"
+version: "1.1.0.0"
 edition: "User's Guide"
 platform: "for Windows"
 publisher: "Habersoft"

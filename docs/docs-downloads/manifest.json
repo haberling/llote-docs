@@ -1,6 +1,11 @@
 {
   "versions": [
     {
+      "file": "llote-docs-v1.1.0.0.md",
+      "hash": "344d7969373f7a2cdc2d6411ce917ff50eb94382eab6d55412575e374dec3aa4",
+      "updated": "2026-09-16"
+    },
+    {
       "file": "llote-docs-v1.0.0.0.md",
       "hash": "aff0bc2fa4e4e0f5f3b0918577494d58ccc47982af23eed9e5f7679542a4b1da",
       "updated": "2026-09-07"
